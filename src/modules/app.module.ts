@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -9,7 +10,8 @@ import { SupportModule } from './support/support.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.dbConnection),
+    ConfigModule.forRoot(),
+    MongooseModule.forRoot(process.env.MONGO_URL),
     UsersModule,
     HotelsModule,
     ReservationModule,
