@@ -11,7 +11,7 @@ import { SupportModule } from './support/support.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    MongooseModule.forRoot(process.env.MONGO_URL),
+    MongooseModule.forRoot("mongodb://mongodb:27017/DB"),
     UsersModule,
     HotelsModule,
     ReservationModule,
