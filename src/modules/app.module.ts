@@ -11,7 +11,7 @@ import { SupportModule } from './support/support.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    MongooseModule.forRoot("mongodb://mongodb:27017/DB"),
+    MongooseModule.forRoot("mongodb+srv://shishkov-i:12qwaszx@cluster0.x7d8w.mongodb.net/hoyelAggregator?retryWrites=true&w=majority"),
     UsersModule,
     HotelsModule,
     ReservationModule,
