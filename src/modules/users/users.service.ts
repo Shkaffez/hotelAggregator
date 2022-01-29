@@ -4,7 +4,7 @@ import { Connection, Model } from 'mongoose';
 import { ID } from '../id.type';
 import { IUserService, SearchUserParams } from './interfaces';
 import { User, UserDocument } from './schemas/user.schema';
-import * as mongoose from 'mongoose'
+import * as mongoose from 'mongoose';
 import { searchFilters } from 'src/utils/helpers';
 
 @Injectable()

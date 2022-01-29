@@ -1,3 +1,3 @@
-import { ObjectId } from 'mongoose';
+import * as mongoose from 'mongoose';
 
-export type ID = string | ObjectId;
+export type ID = string | mongoose.Types.ObjectId;
