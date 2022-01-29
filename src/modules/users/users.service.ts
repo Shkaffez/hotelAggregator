@@ -1,20 +1,80 @@
 import { Injectable } from '@nestjs/common';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
+import { Connection, Model } from 'mongoose';
 import { ID } from '../id.type';
 import { IUserService, SearchUserParams } from './interfaces';
-import { User } from './schemas/user.schema';
+import { User, UserDocument } from './schemas/user.schema';
+import * as mongoose from 'mongoose'
+import { searchFilters } from 'src/utils/helpers';
 
 @Injectable()
 export class UsersService implements IUserService {
-  create(data: Partial<User>): Promise<User> {
-    throw new Error('Method not implemented.');
+  constructor(
+    @InjectModel(User.name) private readonly UserModel: Model<UserDocument>,
+    @InjectConnection() private connection: Connection
+  ) {}
+
+  async create(data: Partial<User>): Promise<Partial<User>> {
+    const _id = new mongoose.Types.ObjectId();    
+    const { email, passwordHash, name, contactPhone, role } = data;
+    const newUser = new this.UserModel({
+      _id,
+      email,
+      passwordHash,
+      name,
+      contactPhone,
+      role 
+    });
+    try {
+      await newUser.save();
+      return {        
+          _id,
+          email,
+          name,
+          contactPhone,
+          role,        
+      }
+    } catch (e) {
+      console.error(e);
+    }
+
   }
-  findById(id: ID): Promise<User> {
-    throw new Error('Method not implemented.');
+  async findById(id: ID): Promise<Partial<User>> {
+    try {
+      const user = await this.UserModel.findById(id);
+      return {
+        _id: user._id,
+        email: user.email,
+        name: user.name,
+        contactPhone: user.contactPhone
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
-  findByEmail(email: string): Promise<User> {
-    throw new Error('Method not implemented.');
+  async findByEmail(email: string): Promise<Partial<User>> {
+    try {
+      const user = await this.UserModel.findOne({email: email});
+      return {
+        _id: user._id,
+        email: user.email,
+        name: user.name,
+        contactPhone: user.contactPhone
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
-  findAll(params: SearchUserParams): Promise<User[]> {
-    throw new Error('Method not implemented.');
+  async findAll(params: SearchUserParams): Promise<Partial<User[]>> {
+    const { limit, offset } = params;
+    const filters = searchFilters(params);
+    try {
+      const users = await this.UserModel.find({
+        ...filters
+      }).skip(offset).limit(limit).select('_id email name contactPhone');
+      return users;    
+    } catch (e) {
+      console.log(e);
+    }  
   }
 }

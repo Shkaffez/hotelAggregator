@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, ObjectId } from 'mongoose';
 import { ID } from 'src/modules/id.type';
 
 export type UserDocument = User & Document;
@@ -25,4 +25,4 @@ export class User {
   role: 'admin' | 'manager' | 'client';
 }
 
-export const BookSchema = SchemaFactory.createForClass(User);
+export const UserSchema = SchemaFactory.createForClass(User);
