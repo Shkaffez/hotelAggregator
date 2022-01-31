@@ -11,6 +11,6 @@ export interface SearchUserParams {
 export interface IUserService {
   create(data: Partial<User>): Promise<Partial<User>>;
   findById(id: ID): Promise<Partial<User>>;
-  findByEmail(email: string): Promise<Partial<User>> ;
+  findByEmail(email: string): Promise<Partial<User>>;
   findAll(params: SearchUserParams): Promise<Partial<User[]>>;
 }

@@ -6,9 +6,9 @@ import { searchUsersDto } from './dto/searchUsers.Dto';
 
 @Controller()
 export class UsersController {
-    constructor(private readonly usersService: UsersService) {}
+    constructor(private readonly usersService: UsersService) { }
 
-    @Post('/api/admin/users/')
+    @Post('/admin/users/')
     public create(@Body() data: createUserDto) {
         const { email, password, name, contactPhone, role } = data;
         const passwordHash = bcript.hashSync(password, 10);
@@ -17,12 +17,12 @@ export class UsersController {
         });
     }
 
-    @Get('/api/admin/users/')
+    @Get('/admin/users/')
     public findAsAdmin(@Param() params: searchUsersDto) {
         return this.usersService.findAll(params);
     }
 
-    @Get('/api/manager/users/')
+    @Get('/manager/users/')
     public findAsManager(@Param() params: searchUsersDto) {
         return this.usersService.findAll(params);
     }
