@@ -10,12 +10,12 @@ export class Hotel {
     _id: mongoose.Types.ObjectId;
 
     @Prop({ required: true })
-    title: mongoose.Types.ObjectId;
+    title: string;
 
     @Prop()
     description: string;
 
-    @Prop({ required: true })
+    @Prop({ required: true, default: new Date().toUTCString })
     createdAt: Date;
 
     @Prop({ required: true })

@@ -5,7 +5,7 @@ import { HotelRoom } from "./schemas/HotelRoom.schema";
 export interface IHotelService {
   create(data: any): Promise<Hotel>;
   findById(id: ID): Promise<Hotel>;
-  search(params: Pick<Hotel, "title">): Promise<Hotel[]>;
+  search(params: SearchHotelsParams): Promise<Hotel[]>;
 }
 
 export interface SearchRoomsParams {
@@ -13,6 +13,11 @@ export interface SearchRoomsParams {
   offset: number;
   id: ID;
   isEnabled?: true;
+}
+
+export interface SearchHotelsParams {
+  limit: number;
+  offset: number;
 }
 
 export interface HotelRoomService {

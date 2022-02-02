@@ -3,3 +3,8 @@
 
 Поменял в SearchRoomsParams title: string на _id: ObjectId. Уточнить у препода, можно ли так, есть ли 
 у них несостыковка.
+
+Поменял в search(params: Pick<Hotel, "title">): Promise<Hotel[]> Pick<Hotel, "title"> на SearchHotelsParams
+
+
+Спросить на счет загрузки файлов в монго дб
