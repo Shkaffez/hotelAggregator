@@ -46,6 +46,10 @@ export class HotelsController {
     @UploadedFiles() files: Array<Express.Multer.File>
   ) {
     const { hotelId, description } = body;
-    return
+    return this.hotelRoomService.create({
+      hotel: hotelId,
+      description,
+      images: files
+    })
   }
 }

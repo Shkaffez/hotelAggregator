@@ -15,7 +15,6 @@ export class HotelsService implements IHotelService {
 
   async create(data: any): Promise<Hotel> {
     const { title, description } = data;
-    // const _id = new mongoose.Types.ObjectId();
     const newHotel = new this.HotelModel({
       title, description
     });

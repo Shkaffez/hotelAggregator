@@ -1,22 +1,22 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import * as mongoose from 'mongoose';
+import { ID } from 'src/modules/id.type';
 
 export type ReservationDocument = Reservation & Document;
 
 @Schema()
 export class Reservation {
     @Prop({ required: true, unique: true })
-    _id: mongoose.Types.ObjectId;
+    _id: ID;
 
     @Prop({ required: true })
-    userId: mongoose.Types.ObjectId;
+    userId: ID;
 
     @Prop({ required: true })
-    hotelId: mongoose.Types.ObjectId;
+    hotelId: ID;
 
     @Prop({ required: true })
-    roomId: mongoose.Types.ObjectId;
+    roomId: ID;
 
     @Prop({ required: true })
     dateStart: Date;

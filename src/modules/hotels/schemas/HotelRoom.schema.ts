@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import * as mongoose from 'mongoose';
+import { ID } from 'src/modules/id.type';
 
 export type HotelRoomDocument = HotelRoom & Document;
 
@@ -10,13 +11,13 @@ export class HotelRoom {
   _id: mongoose.Types.ObjectId;
 
   @Prop({ required: true, type: MongooseSchema.Types.ObjectId, ref: 'Hotel' })
-  hotel: mongoose.Types.ObjectId;
+  hotel: ID;
 
   @Prop()
   description: string;
 
   @Prop({ default: [] })
-  images: string[];
+  images: Array<Express.Multer.File>;
 
   @Prop({ required: true })
   createdAt: Date;

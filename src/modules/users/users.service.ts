@@ -12,10 +12,10 @@ export class UsersService implements IUserService {
   constructor(
     @InjectModel(User.name) private readonly UserModel: Model<UserDocument>,
     @InjectConnection() private connection: Connection
-  ) {}
+  ) { }
 
   async create(data: Partial<User>): Promise<Partial<User>> {
-    const _id = new mongoose.Types.ObjectId();    
+    const _id = new mongoose.Types.ObjectId();
     const { email, passwordHash, name, contactPhone, role } = data;
     const newUser = new this.UserModel({
       _id,
@@ -23,16 +23,16 @@ export class UsersService implements IUserService {
       passwordHash,
       name,
       contactPhone,
-      role 
+      role
     });
     try {
       await newUser.save();
-      return {        
-          _id,
-          email,
-          name,
-          contactPhone,
-          role,        
+      return {
+        _id,
+        email,
+        name,
+        contactPhone,
+        role,
       }
     } catch (e) {
       console.error(e);
@@ -52,15 +52,10 @@ export class UsersService implements IUserService {
       console.log(e);
     }
   }
-  async findByEmail(email: string): Promise<Partial<User>> {
+  async findByEmail(email: string): Promise<User> {
     try {
-      const user = await this.UserModel.findOne({email: email});
-      return {
-        _id: user._id,
-        email: user.email,
-        name: user.name,
-        contactPhone: user.contactPhone
-      }
+      return await this.UserModel.findOne({ email: email });
+
     } catch (e) {
       console.log(e);
     }
@@ -72,9 +67,9 @@ export class UsersService implements IUserService {
       const users = await this.UserModel.find({
         ...filters
       }).skip(offset).limit(limit).select('_id email name contactPhone');
-      return users;    
+      return users;
     } catch (e) {
       console.log(e);
-    }  
+    }
   }
 }
