@@ -7,4 +7,4 @@
 Поменял в search(params: Pick<Hotel, "title">): Promise<Hotel[]> Pick<Hotel, "title"> на SearchHotelsParams
 
 
-Спросить на счет загрузки файлов в монго дб
+Спросить на счет загрузки файлов в монго дб // Дописать согласно ответа: через multer загрузка файлов, в images храним ссылки/имена файлов

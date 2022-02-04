@@ -1,17 +1,87 @@
+import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
-import * as bcript from 'bcrypt'
+import { InjectModel } from '@nestjs/mongoose';
+import { Connection } from 'mongoose';
+import { InjectConnection } from '@nestjs/mongoose';
+import { authUserDto } from './dto/authUser.dto';
+import * as bcript from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { User, UserDocument } from '../users/schemas/user.schema';
+import * as mongoose from 'mongoose';
 
 @Injectable()
 export class AuthService {
-    constructor(private usersService: UsersService) { }
+  constructor(
+    @InjectModel(User.name) private readonly UserModel: Model<UserDocument>,
+    @InjectConnection() private connection: Connection,
+    private jwtService: JwtService,
+  ) { }
 
-    async validateUser(email: string, password: string): Promise<any> {
-        const user = await this.usersService.findByEmail(email);
-        if (user && bcript.compareSync(password, user.passwordHash)) {
-            const { passwordHash, ...result } = user;
-            return result;
-        }
-        return null;
+  public async signup(data: Partial<User>): Promise<Partial<User>> {
+    const _id = new mongoose.Types.ObjectId();
+    const { email, passwordHash, name, contactPhone } = data;
+    const newUser = new this.UserModel({
+      _id,
+      email,
+      passwordHash,
+      name,
+      contactPhone
+    });
+    try {
+      await newUser.save();
+      return {
+        _id,
+        email,
+        name
+      }
+    } catch (e) {
+      console.error(e);
     }
+  }
+
+  public async login(user: any) {
+    console.log(user);
+    const payload = {
+      id: user._id,
+      email: user.email,
+      name: user.name,
+    };
+    console.log(payload);
+    return {
+      id: user._id,
+      name: user.name,
+      contactPhone: user.contactPhone,
+      access_token: this.jwtService.sign(payload),
+    };
+  }
+
+  public async validateUserforLocal(authUserData: authUserDto): Promise<any> {
+    const { email, password } = authUserData;
+
+    try {
+      const user = await (await this.UserModel.findOne({ email: email })).toObject();
+      if (user && bcript.compareSync(password, user.passwordHash)) {
+        const { passwordHash, ...result } = user;
+        return result;
+      }
+      return null;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  public async validateUserForJWT(email) {
+    try {
+      const user = await this.UserModel.findOne({ email: email }).select(
+        '-__v',
+      );
+      if (user) {
+        const { passwordHash, ...result } = user;
+        return result;
+      }
+      return null;
+    } catch (e) {
+      console.log(e);
+    }
+  }
 }

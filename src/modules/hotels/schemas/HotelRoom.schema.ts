@@ -14,6 +14,9 @@ export class HotelRoom {
   hotel: ID;
 
   @Prop()
+  title: string;
+
+  @Prop()
   description: string;
 
   @Prop({ default: [] })

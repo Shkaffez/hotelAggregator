@@ -1,4 +1,4 @@
-import { IsString } from "class-validator";
+import { IsAlpha, IsOptional, IsString } from "class-validator";
 
 export class createUserDto {
     @IsString()
@@ -12,7 +12,8 @@ export class createUserDto {
 
     @IsString()
     public readonly contactPhone: string;
-    
+
     @IsString()
+    @IsOptional()
     public readonly role: 'admin' | 'manager' | 'client';
 }

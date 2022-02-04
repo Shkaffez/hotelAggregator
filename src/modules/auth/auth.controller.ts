@@ -1,4 +1,25 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Request, Post, UseGuards, Body } from '@nestjs/common';
+import { LocalAuthGuard } from 'src/guards/local.auth.guard';
+import { createUserDto } from '../users/dto/createUser.Dto';
+import { AuthService } from './auth.service';
+import * as bcript from 'bcrypt';
 
-@Controller('auth')
-export class AuthController {}
+
+@Controller()
+export class AuthController {
+  constructor(private authService: AuthService) { }
+
+  @UseGuards(LocalAuthGuard)
+  @Post('/auth/login')
+  async login(@Request() req) {
+    return this.authService.login(req.user);
+  }
+
+  @Post('/client/register')
+  async singup(
+    @Body() data: createUserDto) {
+    const { email, password, name, contactPhone } = data;
+    const passwordHash = bcript.hashSync(password, 10);
+    return this.authService.signup({ email, passwordHash, name, contactPhone });
+  }
+}
