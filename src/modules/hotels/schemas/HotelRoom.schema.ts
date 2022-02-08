@@ -7,7 +7,7 @@ export type HotelRoomDocument = HotelRoom & Document;
 
 @Schema()
 export class HotelRoom {
-  @Prop({ required: true, unique: true })
+  @Prop()
   _id: mongoose.Types.ObjectId;
 
   @Prop({ required: true, type: MongooseSchema.Types.ObjectId, ref: 'Hotel' })

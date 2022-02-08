@@ -7,7 +7,7 @@ export type SupportRequestDocument = SupportRequest & Document;
 
 @Schema()
 export class SupportRequest {
-    @Prop({ required: true, unique: true })
+    @Prop()
     _id: mongoose.Types.ObjectId;
 
     @Prop({ required: true })

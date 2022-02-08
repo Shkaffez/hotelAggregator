@@ -12,8 +12,9 @@ import { HotelRoomsService } from './hotel.rooms.service';
       { name: Hotel.name, schema: HotelSchema },
       { name: HotelRoom.name, schema: HotelRoomSchema }
     ])
-  ], 
+  ],
   providers: [HotelsService, HotelRoomsService],
-  controllers: [HotelsController]
+  controllers: [HotelsController],
+  exports: [HotelRoomsService]
 })
-export class HotelsModule {}
+export class HotelsModule { }

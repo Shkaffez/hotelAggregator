@@ -1,14 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { ID } from 'src/modules/id.type';
 import { Role } from 'src/utils/role.enum';
+import * as mongoose from 'mongoose';
 
 export type UserDocument = User & Document;
 
 @Schema()
 export class User {
-  @Prop({ required: true, unique: true })
-  _id: ID;
+  @Prop()
+  _id: mongoose.Types.ObjectId;
 
   @Prop({ required: true, unique: true })
   email: string;
@@ -22,7 +22,7 @@ export class User {
   @Prop()
   contactPhone: string;
 
-  @Prop({ default: 'client' })
+  @Prop({ default: Role.Client })
   role: Role;
 }
 

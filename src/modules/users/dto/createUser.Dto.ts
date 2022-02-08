@@ -1,4 +1,5 @@
 import { IsAlpha, IsOptional, IsString } from "class-validator";
+import { Role } from "src/utils/role.enum";
 
 export class createUserDto {
     @IsString()
@@ -15,5 +16,5 @@ export class createUserDto {
 
     @IsString()
     @IsOptional()
-    public readonly role: 'admin' | 'manager' | 'client';
+    public readonly role: Role;
 }
