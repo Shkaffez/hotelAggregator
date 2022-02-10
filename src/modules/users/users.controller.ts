@@ -1,14 +1,21 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards, Request } from '@nestjs/common';
 import { createUserDto } from './dto/createUser.Dto';
 import { UsersService } from './users.service';
 import * as bcript from 'bcrypt';
 import { searchUsersDto } from './dto/searchUsers.Dto';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { Roles } from 'src/utils/roles.decorator';
+import { Role } from 'src/utils/role.enum';
+import { JwtAuthGuard } from 'src/guards/jwt.auth.guard';
 
 @Controller()
 export class UsersController {
     constructor(private readonly usersService: UsersService) { }
 
     @Post('/admin/users/')
+    @Roles(Role.Admin)
+    @UseGuards(RolesGuard)
+    @UseGuards(JwtAuthGuard)
     public create(@Body() data: createUserDto) {
         const { email, password, name, contactPhone, role } = data;
         const passwordHash = bcript.hashSync(password, 10);
@@ -18,13 +25,19 @@ export class UsersController {
     }
 
     @Get('/admin/users/')
-    public findAsAdmin(@Param() params: searchUsersDto) {
-        return this.usersService.findAll(params);
+    @Roles(Role.Admin)
+    @UseGuards(RolesGuard)
+    @UseGuards(JwtAuthGuard)
+    public findAsAdmin(@Query() query: searchUsersDto) {
+        return this.usersService.findAll(query);
     }
 
     @Get('/manager/users/')
-    public findAsManager(@Param() params: searchUsersDto) {
-        return this.usersService.findAll(params);
+    @Roles(Role.Manager)
+    @UseGuards(RolesGuard)
+    @UseGuards(JwtAuthGuard)
+    public findAsManager(@Query() query: searchUsersDto) {
+        return this.usersService.findAll(query);
     }
 
 }

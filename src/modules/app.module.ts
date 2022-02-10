@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { HotelsModule } from './hotels/hotels.module';
 import { ReservationModule } from './reservation/reservation.module';
 import { SupportModule } from './support/support.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -16,8 +17,9 @@ import { SupportModule } from './support/support.module';
     HotelsModule,
     ReservationModule,
     SupportModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
