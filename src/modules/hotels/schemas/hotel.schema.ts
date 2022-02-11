@@ -6,19 +6,16 @@ export type HotelDocument = Hotel & Document;
 
 @Schema()
 export class Hotel {
-    @Prop()
-    _id: mongoose.Types.ObjectId;
-
     @Prop({ required: true })
     title: string;
 
     @Prop()
     description: string;
 
-    @Prop({ required: true, default: new Date().toUTCString })
+    @Prop({ required: true, default: new Date() })
     createdAt: Date;
 
-    @Prop({ required: true })
+    @Prop()
     updatedAt: Date;
 }
 

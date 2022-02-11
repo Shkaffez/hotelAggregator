@@ -15,12 +15,24 @@ export class HotelsService implements IHotelService {
 
   async create(data: any): Promise<Hotel> {
     const { title, description } = data;
+    const updateAt = new Date();
     const newHotel = new this.HotelModel({
-      title, description
+      title, description, updateAt
     });
     try {
       await newHotel.save();
       return await this.HotelModel.findById({ _id: newHotel._id }).select('_id title description');
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async update(id: string, data: any): Promise<Hotel> {
+    const { title, description } = data;
+    const updateAt = new Date();
+    try {
+      return await this.HotelModel.findByIdAndUpdate(id, { title, description, updateAt }, { new: true })
+        .select('_id title description');
     } catch (e) {
       console.log(e);
     }

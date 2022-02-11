@@ -7,9 +7,6 @@ export type HotelRoomDocument = HotelRoom & Document;
 
 @Schema()
 export class HotelRoom {
-  @Prop()
-  _id: mongoose.Types.ObjectId;
-
   @Prop({ required: true, type: MongooseSchema.Types.ObjectId, ref: 'Hotel' })
   hotel: ID;
 
@@ -20,12 +17,12 @@ export class HotelRoom {
   description: string;
 
   @Prop({ default: [] })
-  images: Array<Express.Multer.File>;
+  images: Array<string>;
 
-  @Prop({ required: true })
+  @Prop({ required: true, default: new Date() })
   createdAt: Date;
 
-  @Prop({ required: true })
+  @Prop()
   updatedAt: Date;
 
   @Prop({ required: true, default: true })

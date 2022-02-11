@@ -13,8 +13,20 @@ export class HotelRoomsService implements HotelRoomService {
   ) { }
 
   async create(data: Partial<HotelRoom>): Promise<HotelRoom> {
-    throw new Error('Method not implemented.');
+    const { title, description, hotel, images } = data;
+    const newHotelRoom = new this.HotelRoomModel({
+      title, description, hotel, images
+    });
+    try {
+      await newHotelRoom.save();
+      return await this.HotelRoomModel.findById({ _id: newHotelRoom._id })
+        .populate({ path: 'hotel', select: '_id title description' })
+        .select('_id title description images isEnabled hotel');
+    } catch (e) {
+      console.log(e);
+    }
   }
+
 
   async findById(id: ID, isEnabled?: true): Promise<HotelRoom> {
     try {
@@ -44,6 +56,17 @@ export class HotelRoomsService implements HotelRoomService {
 
 
   async update(id: ID, data: Partial<HotelRoom>): Promise<HotelRoom> {
-    throw new Error('Method not implemented.');
+    const { title, description, hotel, images, isEnabled } = data;
+    const newHotelRoom = new this.HotelRoomModel({
+      title, description, hotel, images, isEnabled
+    });
+    try {
+      await newHotelRoom.save();
+      return await this.HotelRoomModel.findById({ _id: newHotelRoom._id })
+        .populate({ path: 'hotel', select: '_id title description' })
+        .select('_id title description images isEnabled hotel');
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
