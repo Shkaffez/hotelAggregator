@@ -4,7 +4,6 @@ import {
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { identity } from 'rxjs';
 import { JwtAuthGuard } from 'src/guards/jwt.auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { editFileName } from 'src/utils/file-uploading.utils';

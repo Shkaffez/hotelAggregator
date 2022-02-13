@@ -27,13 +27,12 @@ export class HotelRoomsService implements HotelRoomService {
     }
   }
 
-
   async findById(id: ID, isEnabled?: true): Promise<HotelRoom> {
     try {
       const room = await this.HotelRoomModel.findById({ _id: id }).populate({
-        path: 'Hotel',
+        path: 'hotel',
         select: '_id title description'
-      }).select('_id description images hotel').exec();
+      }).select('_id title description images hotel').exec();
       return room;
     } catch (e) {
       console.log(e);
@@ -41,28 +40,21 @@ export class HotelRoomsService implements HotelRoomService {
   }
 
   async search(params: SearchRoomsParams): Promise<HotelRoom[]> {
-    const { limit, offset, id } = params;
+    let { limit, offset, id } = params;
     try {
       const rooms = await this.HotelRoomModel.find({ hotel: id }).populate({
-        path: 'Hotel',
+        path: 'hotel',
         select: '_id title'
-      }).skip(offset).limit(limit).select('_id description images hotel').exec();
+      }).skip(offset).limit(limit).select('_id title images hotel').exec();
       return rooms;
     } catch (e) {
       console.log(e);
     }
   }
 
-
-
   async update(id: ID, data: Partial<HotelRoom>): Promise<HotelRoom> {
-    const { title, description, hotel, images, isEnabled } = data;
-    const newHotelRoom = new this.HotelRoomModel({
-      title, description, hotel, images, isEnabled
-    });
     try {
-      await newHotelRoom.save();
-      return await this.HotelRoomModel.findById({ _id: newHotelRoom._id })
+      return await this.HotelRoomModel.findByIdAndUpdate(id, data, { new: true })
         .populate({ path: 'hotel', select: '_id title description' })
         .select('_id title description images isEnabled hotel');
     } catch (e) {

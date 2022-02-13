@@ -4,7 +4,6 @@ import { Connection, Model } from 'mongoose';
 import { ID } from '../id.type';
 import { IHotelService, SearchHotelsParams } from './interfaces';
 import { Hotel, HotelDocument } from './schemas/hotel.schema';
-import * as mongoose from 'mongoose';
 
 @Injectable()
 export class HotelsService implements IHotelService {
@@ -39,7 +38,11 @@ export class HotelsService implements IHotelService {
   }
 
   async findById(id: ID): Promise<Hotel> {
-    throw new Error('Method not implemented.');
+    try {
+      return await this.HotelModel.findById({ _id: id })
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   async search(params: SearchHotelsParams): Promise<Hotel[]> {
