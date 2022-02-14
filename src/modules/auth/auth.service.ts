@@ -27,16 +27,8 @@ export class AuthService {
       name,
       contactPhone
     });
-    try {
-      await newUser.save();
-      return {
-        _id,
-        email,
-        name
-      }
-    } catch (e) {
-      console.error(e);
-    }
+    await newUser.save();
+    return { _id, email, name }
   }
 
   public async login(user: any) {

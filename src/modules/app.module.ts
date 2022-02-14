@@ -13,7 +13,7 @@ import { MulterModule } from '@nestjs/platform-express';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    MongooseModule.forRoot("mongodb+srv://shishkov-i:12qwaszx@cluster0.x7d8w.mongodb.net/hoyelAggregator?retryWrites=true&w=majority"),
+    MongooseModule.forRoot("mongodb+srv://shishkov-i:12qwaszx@cluster0.x7d8w.mongodb.net/hotelAggregator?retryWrites=true&w=majority"),
     MulterModule.register({
       dest: './files',
     }),

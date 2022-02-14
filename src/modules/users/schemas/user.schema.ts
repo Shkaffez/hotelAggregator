@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { Role } from 'src/utils/role.enum';
 import * as mongoose from 'mongoose';
+// import * as uniqueValidator from 'mongoose-unique-validator';
 
 export type UserDocument = User & Document;
 
@@ -16,7 +17,7 @@ export class User {
   @Prop({ required: true })
   passwordHash: string;
 
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   name: string;
 
   @Prop()
@@ -27,3 +28,4 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+// UserSchema.plugin(uniqueValidator);
