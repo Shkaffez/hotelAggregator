@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
 import { ID } from '../id.type';
 import { HotelRoomService, SearchRoomsParams } from './interfaces';
 import { HotelRoom, HotelRoomDocument } from './schemas/HotelRoom.schema';
+import * as mongoose from 'mongoose';
 
 @Injectable()
 export class HotelRoomsService implements HotelRoomService {
@@ -28,15 +29,21 @@ export class HotelRoomsService implements HotelRoomService {
   }
 
   async findById(id: ID, isEnabled?: true): Promise<HotelRoom> {
-    try {
-      const room = await this.HotelRoomModel.findById({ _id: id }).populate({
-        path: 'hotel',
-        select: '_id title description'
-      }).select('_id title description images hotel').exec();
-      return room;
-    } catch (e) {
-      console.log(e);
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new HttpException('not valid id', HttpStatus.BAD_REQUEST);
     }
+    const room = await this.HotelRoomModel.findById({ _id: id }).populate({
+      path: 'hotel',
+      select: '_id title description'
+    }).select('_id title description images hotel').exec();
+    if (!room) {
+      throw new HttpException('this id not exist', HttpStatus.BAD_REQUEST);
+    }
+    if (room.isEnabled === false) {
+      throw new HttpException('this id is not enabled', HttpStatus.BAD_REQUEST);
+    }
+    return room;
+
   }
 
   async search(params: SearchRoomsParams): Promise<HotelRoom[]> {

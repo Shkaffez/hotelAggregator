@@ -55,7 +55,7 @@ export class HotelsController {
   @Roles(Role.Admin)
   @UseGuards(RolesGuard)
   @UseGuards(JwtAuthGuard)
-  updateHotel(@Param('id') id, @Body() data: newHotelDto, @Request() req) {
+  updateHotel(@Param('id') id, @Body() data: newHotelDto) {
     return this.hotelService.update(id, data);
   }
 

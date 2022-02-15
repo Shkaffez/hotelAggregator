@@ -6,8 +6,6 @@ export type ReservationDocument = Reservation & Document;
 
 @Schema()
 export class Reservation {
-    @Prop()
-    _id: mongoose.Types.ObjectId;
 
     @Prop({ required: true })
     userId: mongoose.Types.ObjectId;

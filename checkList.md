@@ -16,6 +16,20 @@ POST /api/admin/hotel-rooms/	work
 2.1.7 Изменение описания номера
 PUT /api/admin/hotel-rooms/:id	work
 
+2.2 API Модуля "Бронирование"   Done
+
+2.2.1 Бронирование номера клиентом
+POST /api/client/reservations   work
+2.2.2 Список броней текущего пользователя
+GET /api/client/reservations    work
+2.2.3 Отмена бронирования клиентом
+DELETE /api/client/reservations/:id work
+2.2.4 Список броней конкретного пользователя
+GET /api/manager/reservations/:userId   work
+2.2.5 Отмена бронирования менеджером
+DELETE /api/manager/reservations/:userId/:reservationId     work
+
+
 2.3 API Модуля "Аутентификация и авторизация"
 Переделать с jwt на сессии и куки
 
