@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
-import * as mongoose from 'mongoose';
 import { ID } from 'src/modules/id.type';
 
 export type HotelRoomDocument = HotelRoom & Document;

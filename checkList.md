@@ -19,7 +19,10 @@ PUT /api/admin/hotel-rooms/:id	work
 2.2 API Модуля "Бронирование"   Done
 
 2.2.1 Бронирование номера клиентом
-POST /api/client/reservations   work
+POST /api/client/reservations   
+
+добавить проверку наподобии let reserv = await this.reservationModel.findOne({dateStart:{$gte:data.startDate},dateEnd:{$lte:data.endDate}});
+
 2.2.2 Список броней текущего пользователя
 GET /api/client/reservations    work
 2.2.3 Отмена бронирования клиентом
@@ -48,6 +51,12 @@ POST /api/admin/users/	        work
 GET /api/admin/users/	        work
 GET /api/manager/users/	        work
 
+2.5 API модуля "Чат с техподдрежкой"
+
+2.5.1 Создание обращения в поддержку
+POST /api/client/support-requests/  work
+2.5.2 Получение списка обращений в поддержку для клиента
+GET /api/client/support-requests/
 
 
 

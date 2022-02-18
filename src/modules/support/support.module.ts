@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Message, MessageSchema } from './schemas/Message.schema';
 import { SupportRequest, SupportRequestSchema } from './schemas/SupportRequest.schema';
 import { SupportClientService } from './support.client.service';
+import { SupportController } from './support.controller';
 import { SupportEmployeeService } from './support.employee.service';
 import { SupportService } from './support.service';
 
@@ -13,6 +14,7 @@ import { SupportService } from './support.service';
       { name: SupportRequest.name, schema: SupportRequestSchema }
     ])
   ],
-  providers: [SupportService, SupportClientService, SupportEmployeeService]
+  providers: [SupportService, SupportClientService, SupportEmployeeService],
+  controllers: [SupportController]
 })
-export class SupportModule {}
+export class SupportModule { }

@@ -2,7 +2,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { Role } from 'src/utils/role.enum';
 import * as mongoose from 'mongoose';
-// import * as uniqueValidator from 'mongoose-unique-validator';
 
 export type UserDocument = User & Document;
 
