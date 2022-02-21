@@ -17,8 +17,10 @@ export class SupportClientService implements ISupportRequestClientService {
 
     async createSupportRequest(data: CreateSupportRequestDto): Promise<SupportRequest> {
         const _id = new mongoose.Types.ObjectId();
+        const messageId = new mongoose.Types.ObjectId();
         const { user, text } = data;
         const message = new this.MessageModel({
+            _id: messageId,
             author: user,
             text: text,
             sentAt: new Date()
@@ -33,13 +35,45 @@ export class SupportClientService implements ISupportRequestClientService {
     }
 
     async getClientSupportRequests(data: SearchSupportRequestParams, userId: ID) {
-        throw new Error('Method not implemented.');
+        const { limit, offset, isActive } = data;
+        const user = new mongoose.Types.ObjectId(userId);
+        let filter = { isActive: undefined }
+        if (isActive) {
+            filter.isActive = { isActive }
+        }
+        if (!filter.isActive) {
+            delete filter.isActive;
+        }
+        let supportRequests = await this.SupportRequestModel.find({ user: user, ...filter })
+            .skip(offset).limit(limit).select('_id createdAt isActive');
+
+        let hasNewMessages = supportRequests.map(async (supportRequest) => {
+            let newMessageCount = await this.getUnreadCount(supportRequest._id);
+            if (newMessageCount > 0) {
+                return {
+                    id: supportRequest._id,
+                    createdAt: supportRequest.createdAt,
+                    isActive: supportRequest.isActive,
+                    hasNewMessages: true
+                }
+            }
+            return {
+                id: supportRequest._id,
+                createdAt: supportRequest.createdAt,
+                isActive: supportRequest.isActive,
+                hasNewMessages: false
+            }
+        });
+
+        return Promise.all(hasNewMessages);
     }
 
 
     markMessagesAsRead(params: MarkMessagesAsReadDto) {
         throw new Error('Method not implemented.');
     }
+
+
     async getUnreadCount(supportRequest: ID): Promise<number> {
         supportRequest = new mongoose.Types.ObjectId(supportRequest);
         const supportRequestData = await this.SupportRequestModel.findById(supportRequest);

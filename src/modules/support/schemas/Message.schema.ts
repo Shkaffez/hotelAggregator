@@ -7,6 +7,9 @@ export type MessageDocument = Message & Document;
 
 @Schema()
 export class Message {
+    @Prop()
+    _id: mongoose.Types.ObjectId;
+
     @Prop({ required: true, type: MongooseSchema.Types.ObjectId, ref: 'User' })
     author: ID;
 

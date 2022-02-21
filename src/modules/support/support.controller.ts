@@ -3,7 +3,7 @@ import { JwtAuthGuard } from 'src/guards/jwt.auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Role } from 'src/utils/role.enum';
 import { Roles } from 'src/utils/roles.decorator';
-import { getClientSupportRequestsDto } from './dto/getClientSupportRequests.dto';
+import { getSupportRequestsDto } from './dto/getSupportRequests.dto';
 import { newSupportRequestDto } from './dto/newSupportRequest.dto';
 import { SupportClientService } from './support.client.service';
 import { SupportEmployeeService } from './support.employee.service';
@@ -33,20 +33,14 @@ export class SupportController {
         }
     }
 
-
     @Get('/client/support-requests/')
     @Roles(Role.Client)
     @UseGuards(RolesGuard)
     @UseGuards(JwtAuthGuard)
-    async getClientSupportRequests(@Query() data: getClientSupportRequestsDto, @Request() req) {
+    async getClientSupportRequests(@Request() req, @Query() data: getSupportRequestsDto) {
         const user = req.user._doc._id;
-        const response = await this.getClientSupportRequests(data, user);
-    }
-
-    // для теста
-    @Get('/getcount/:supportRequest')
-    async getCount(@Param('supportRequest') supportRequest) {
-        return await this.supportClientService.getUnreadCount(supportRequest);
+        const response = await this.supportClientService.getClientSupportRequests(data, user);
+        return response;
     }
 
     @Post('/common/support-requests/:id/messages')
@@ -60,5 +54,34 @@ export class SupportController {
         const author = req.user._doc._id;
         const { text } = data;
         return await this.supportService.sendMessage({ author, supportRequest, text });
+    }
+
+    @Get('/manager/support-requests/')
+    @Roles(Role.Client)
+    @UseGuards(RolesGuard)
+    @UseGuards(JwtAuthGuard)
+    async getManagerSupportRequests(@Query() data: getSupportRequestsDto) {
+        const response = await this.supportEmployeeService.getManagerSupportRequests(data);
+        return response;
+    }
+
+    @Get('/common/support-requests/:id/messages')
+    @Roles(Role.Client, Role.Manager)
+    @UseGuards(RolesGuard)
+    @UseGuards(JwtAuthGuard)
+    async getMessages(@Param('id') supportRequest, @Request() req) {
+        const author = req.user._doc;
+        return await this.supportService.getMessages(supportRequest, author);
+    }
+
+    @Post('/common/support-requests/:id/messages/read')
+    @Roles(Role.Client, Role.Manager)
+    @UseGuards(RolesGuard)
+    @UseGuards(JwtAuthGuard)
+    async markMessagesAsRead(@Param('id') supportRequest, @Request() req) {
+        const user = req.user._doc._id;
+        if (req.user._doc.role == 'manager') {
+            return await this.supportEmployeeService.markMessagesAsRead({ supportRequest, user });
+        }
     }
 }

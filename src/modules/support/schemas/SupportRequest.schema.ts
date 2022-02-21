@@ -11,13 +11,13 @@ export class SupportRequest {
     @Prop()
     _id: mongoose.Types.ObjectId;
 
-    @Prop({ required: true, type: mongoose.Types.ObjectId })
+    @Prop({ required: true, type: MongooseSchema.Types.ObjectId, ref: 'User' })
     user: ID;
 
     @Prop({ required: true, default: new Date() })
     createdAt: Date;
 
-    @Prop()
+    @Prop([{ type: MongooseSchema.Types.ObjectId, ref: Message.name }])
     messages: Message[];
 
     @Prop({ default: true })

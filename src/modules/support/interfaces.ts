@@ -15,7 +15,6 @@ export interface SendMessageDto {
 export interface MarkMessagesAsReadDto {
     user: ID;
     supportRequest: ID;
-    createdBefore: Date;
 }
 
 export interface GetChatListParams {
@@ -24,27 +23,28 @@ export interface GetChatListParams {
 }
 
 export interface SearchSupportRequestParams {
-    limit: Number;
-    offset: Number;
-    isActive: Boolean;
+    limit: number;
+    offset: number;
+    isActive: boolean;
 }
 
 export interface ISupportRequestService {
-    findSupportRequests(params: GetChatListParams): Promise<SupportRequest[]>;
     sendMessage(data: SendMessageDto): Promise<Message>;
-    getMessages(supportRequest: ID): Promise<Message[]>;
+    getMessages(supportRequest: ID, user): Promise<Message[]>;
     subscribe(
         handler: (supportRequest: SupportRequest, message: Message) => void
     ): () => void;
 }
 
 export interface ISupportRequestClientService {
+    getClientSupportRequests(data: SearchSupportRequestParams, userId: ID)
     createSupportRequest(data: CreateSupportRequestDto): Promise<SupportRequest>;
     markMessagesAsRead(params: MarkMessagesAsReadDto);
     getUnreadCount(supportRequest: ID): Promise<number>;
 }
 
 export interface ISupportRequestEmployeeService {
+    getManagerSupportRequests(data: SearchSupportRequestParams)
     markMessagesAsRead(params: MarkMessagesAsReadDto);
     getUnreadCount(supportRequest: ID): Promise<number>;
     closeRequest(supportRequest: ID): Promise<void>;
