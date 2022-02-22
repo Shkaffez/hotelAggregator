@@ -19,14 +19,15 @@ export class SupportService implements ISupportRequestService {
         const _id = new mongoose.Types.ObjectId();
         let { author, supportRequest, text } = data;
         const message = new this.MessageModel({ _id, author, text });
-        message.save();
+        await message.save();
         supportRequest = new mongoose.Types.ObjectId(supportRequest);
         const request = await this.SupportRequestModel.findById(supportRequest);
         request.messages.push(message);
-        request.save();
-        return await this.MessageModel.findById({ _id: message._id }).populate({
+        await request.save();
+        let response = await this.MessageModel.findById(_id).populate({
             path: 'author', select: '_id name'
         }).select('-__v');
+        return response;
     }
 
 

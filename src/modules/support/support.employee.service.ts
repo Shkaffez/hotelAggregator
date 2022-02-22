@@ -20,13 +20,17 @@ export class SupportEmployeeService implements ISupportRequestEmployeeService {
         supportRequest = new mongoose.Types.ObjectId(supportRequest);
         const supportRequestData = await this.SupportRequestModel.findById(supportRequest);
         const supportRequestAuthor = supportRequestData.user;
-        const updatedMessages = supportRequestData.messages.map(async (msg) => {
+        supportRequestData.messages.forEach(async (msg) => {
             if ((msg.author.toString() === supportRequestAuthor.toString()) && !msg.readAt) {
                 const message = await this.MessageModel.findById(msg._id);
                 message.readAt = new Date();
                 await message.save();
-                supportRequestData.messages.push(message);
-                console.log(supportRequestData)
+            }
+            return;
+        });
+        supportRequestData.messages.forEach((msg) => {
+            if ((msg.author.toString() === supportRequestAuthor.toString()) && !msg.readAt) {
+                msg.readAt = new Date();
             }
             return;
         });

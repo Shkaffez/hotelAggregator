@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
 import { ID } from '../id.type';
@@ -64,13 +64,33 @@ export class SupportClientService implements ISupportRequestClientService {
                 hasNewMessages: false
             }
         });
-
         return Promise.all(hasNewMessages);
     }
 
 
-    markMessagesAsRead(params: MarkMessagesAsReadDto) {
-        throw new Error('Method not implemented.');
+    async markMessagesAsRead(params: MarkMessagesAsReadDto) {
+        let { supportRequest, user } = params;
+        supportRequest = new mongoose.Types.ObjectId(supportRequest);
+        const supportRequestData = await this.SupportRequestModel.findById(supportRequest);
+        if (supportRequestData.user.toString() !== user.toString()) {
+            throw new HttpException('this another user support request', HttpStatus.FORBIDDEN);
+        }
+        supportRequestData.messages.forEach(async (msg) => {
+            if ((msg.author.toString() !== user.toString()) && !msg.readAt) {
+                const message = await this.MessageModel.findById(msg._id);
+                message.readAt = new Date();
+                await message.save();
+            }
+            return;
+        });
+        supportRequestData.messages.forEach((msg) => {
+            if ((msg.author.toString() !== user.toString()) && !msg.readAt) {
+                msg.readAt = new Date();
+            }
+            return;
+        });
+        await supportRequestData.save();
+        return { "success": true }
     }
 
 

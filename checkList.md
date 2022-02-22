@@ -64,7 +64,7 @@ GET /api/common/support-requests/:id/messages   work
 2.5.5 Отправка сообщения
 POST /api/common/support-requests/:id/messages  work
 2.5.6 Отправка события, что сообщения прочитаны
-POST /api/common/support-requests/:id/messages/read
+POST /api/common/support-requests/:id/messages/read work
 
 
 JWT client = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMDM2OGNjNjM0NDAwNGFmZjcyZGQwNyIsImVtYWlsIjoic2hpc2hrb3ZAbWFpbC5ydSIsIm5hbWUiOiJJdmFuIiwiaWF0IjoxNjQ1MjY4NTQ1fQ._v1RnpA2vK6BglwOVAjmnAx4QK8rH_cOeYweldkcOQY

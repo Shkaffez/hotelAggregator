@@ -83,5 +83,8 @@ export class SupportController {
         if (req.user._doc.role == 'manager') {
             return await this.supportEmployeeService.markMessagesAsRead({ supportRequest, user });
         }
+        if (req.user._doc.role == 'client') {
+            return await this.supportClientService.markMessagesAsRead({ supportRequest, user });
+        }
     }
 }
