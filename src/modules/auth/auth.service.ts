@@ -5,7 +5,6 @@ import { Connection } from 'mongoose';
 import { InjectConnection } from '@nestjs/mongoose';
 import { authUserDto } from './dto/authUser.dto';
 import * as bcript from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
 import { User, UserDocument } from '../users/schemas/user.schema';
 import * as mongoose from 'mongoose';
 
@@ -14,7 +13,6 @@ export class AuthService {
   constructor(
     @InjectModel(User.name) private readonly UserModel: Model<UserDocument>,
     @InjectConnection() private connection: Connection,
-    private jwtService: JwtService,
   ) { }
 
   public async signup(data: Partial<User>): Promise<Partial<User>> {
@@ -31,41 +29,12 @@ export class AuthService {
     return { _id, email, name }
   }
 
-  public async login(user: any) {
-    const payload = {
-      id: user._id,
-      email: user.email,
-      name: user.name,
-    };
-    return {
-      id: user._id,
-      name: user.name,
-      contactPhone: user.contactPhone,
-      access_token: this.jwtService.sign(payload),
-    };
-  }
-
   public async validateUserforLocal(authUserData: authUserDto): Promise<any> {
     const { email, password } = authUserData;
 
     try {
       const user = await (await this.UserModel.findOne({ email: email })).toObject();
       if (user && bcript.compareSync(password, user.passwordHash)) {
-        const { passwordHash, ...result } = user;
-        return result;
-      }
-      return null;
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  public async validateUserForJWT(email) {
-    try {
-      const user = await this.UserModel.findOne({ email: email }).select(
-        '-__v',
-      );
-      if (user) {
         const { passwordHash, ...result } = user;
         return result;
       }

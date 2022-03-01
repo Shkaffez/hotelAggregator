@@ -67,11 +67,7 @@ POST /api/common/support-requests/:id/messages  work
 POST /api/common/support-requests/:id/messages/read work
 
 
-JWT client = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMDM2OGNjNjM0NDAwNGFmZjcyZGQwNyIsImVtYWlsIjoic2hpc2hrb3ZAbWFpbC5ydSIsIm5hbWUiOiJJdmFuIiwiaWF0IjoxNjQ1MjY4NTQ1fQ._v1RnpA2vK6BglwOVAjmnAx4QK8rH_cOeYweldkcOQY
-
-JWT manager = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMDM2YjVmNjM0NDAwNGFmZjcyZGQwYSIsImVtYWlsIjoiYWJjZGVAbWFpbC5ydSIsIm5hbWUiOiJBQUEiLCJpYXQiOjE2NDU0NDIxNTR9.9HwzhW-JyxB9lgbGUxd0fPsq6sa5z8K8OVEq9Br26sQ
-
-
+ 
 
 
 

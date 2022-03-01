@@ -1,5 +1,5 @@
 import { Body, Controller, Post, UseGuards, Request, Query, Get, Param } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/guards/jwt.auth.guard';
+import { AuthenticatedGuard } from 'src/guards/authenticated.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Role } from 'src/utils/role.enum';
 import { Roles } from 'src/utils/roles.decorator';
@@ -20,7 +20,7 @@ export class SupportController {
     @Post('/client/support-requests/')
     @Roles(Role.Client)
     @UseGuards(RolesGuard)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(AuthenticatedGuard)
     async createSupportRequest(@Body() data: newSupportRequestDto, @Request() req) {
         const { text } = data;
         const user = req.user._doc._id;
@@ -36,7 +36,7 @@ export class SupportController {
     @Get('/client/support-requests/')
     @Roles(Role.Client)
     @UseGuards(RolesGuard)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(AuthenticatedGuard)
     async getClientSupportRequests(@Request() req, @Query() data: getSupportRequestsDto) {
         const user = req.user._doc._id;
         const response = await this.supportClientService.getClientSupportRequests(data, user);
@@ -46,7 +46,7 @@ export class SupportController {
     @Post('/common/support-requests/:id/messages')
     @Roles(Role.Client, Role.Manager)
     @UseGuards(RolesGuard)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(AuthenticatedGuard)
     async sendMessage(
         @Param('id') supportRequest,
         @Body() data: newSupportRequestDto,
@@ -59,7 +59,7 @@ export class SupportController {
     @Get('/manager/support-requests/')
     @Roles(Role.Client)
     @UseGuards(RolesGuard)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(AuthenticatedGuard)
     async getManagerSupportRequests(@Query() data: getSupportRequestsDto) {
         const response = await this.supportEmployeeService.getManagerSupportRequests(data);
         return response;
@@ -68,7 +68,7 @@ export class SupportController {
     @Get('/common/support-requests/:id/messages')
     @Roles(Role.Client, Role.Manager)
     @UseGuards(RolesGuard)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(AuthenticatedGuard)
     async getMessages(@Param('id') supportRequest, @Request() req) {
         const author = req.user._doc;
         return await this.supportService.getMessages(supportRequest, author);
@@ -77,7 +77,7 @@ export class SupportController {
     @Post('/common/support-requests/:id/messages/read')
     @Roles(Role.Client, Role.Manager)
     @UseGuards(RolesGuard)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(AuthenticatedGuard)
     async markMessagesAsRead(@Param('id') supportRequest, @Request() req) {
         const user = req.user._doc._id;
         if (req.user._doc.role == 'manager') {

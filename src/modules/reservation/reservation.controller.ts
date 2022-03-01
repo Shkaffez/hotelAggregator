@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Request, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/guards/jwt.auth.guard';
+import { AuthenticatedGuard } from 'src/guards/authenticated.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Role } from 'src/utils/role.enum';
 import { Roles } from 'src/utils/roles.decorator';
@@ -17,7 +17,7 @@ export class ReservationController {
     @Post('/client/reservations')
     @Roles(Role.Client)
     @UseGuards(RolesGuard)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(AuthenticatedGuard)
     async addReservation(@Body() data: newReservationDto, @Request() req) {
         let { hotelRoom, startDate, endDate } = data;
         const userId = req.user._doc._id;
@@ -37,16 +37,16 @@ export class ReservationController {
     @Get('/client/reservations')
     @Roles(Role.Client)
     @UseGuards(RolesGuard)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(AuthenticatedGuard)
     async getCurrentUserReservations(@Request() req) {
-        const userId = req.user._doc._id;
+        const userId = req.user._id;
         return this.reservationService.getCurrentUserReservations(userId);
     }
 
     @Delete('/client/reservations/:id')
     @Roles(Role.Client)
     @UseGuards(RolesGuard)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(AuthenticatedGuard)
     async deleteCurrentUserReservations(@Param('id') id, @Request() req) {
         const userId = req.user._doc._id;
         await this.reservationService.deleteCurrentUserReservations(userId, id);
@@ -56,7 +56,7 @@ export class ReservationController {
     @Get('/manager/reservations/:userId')
     @Roles(Role.Manager)
     @UseGuards(RolesGuard)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(AuthenticatedGuard)
     async getUserReservations(@Param('userId') id) {
         return this.reservationService.getCurrentUserReservations(id);
     }
@@ -64,7 +64,7 @@ export class ReservationController {
     @Delete('/manager/reservations/:userId/:reservationId')
     @Roles(Role.Manager)
     @UseGuards(RolesGuard)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(AuthenticatedGuard)
     async deleteUserReservations(@Param('userId') userId, @Param('reservationId') reservationId) {
         await this.reservationService.deleteCurrentUserReservations(userId, reservationId);
         return;

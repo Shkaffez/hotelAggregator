@@ -4,7 +4,7 @@ import {
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { JwtAuthGuard } from 'src/guards/jwt.auth.guard';
+import { AuthenticatedGuard } from 'src/guards/authenticated.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { editFileName } from 'src/utils/file-uploading.utils';
 import { imageFileFilter } from 'src/utils/imageFileFilter';
@@ -38,7 +38,7 @@ export class HotelsController {
   @Post('/admin/hotels/')
   @Roles(Role.Admin)
   @UseGuards(RolesGuard)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthenticatedGuard)
   addNewHotel(@Body() data: newHotelDto) {
     return this.hotelService.create(data);
   }
@@ -46,7 +46,7 @@ export class HotelsController {
   @Get('/admin/hotels/')
   @Roles(Role.Admin)
   @UseGuards(RolesGuard)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthenticatedGuard)
   searchHotels(@Query() data: searchHotelsDto) {
     return this.hotelService.search(data);
   }
@@ -54,7 +54,7 @@ export class HotelsController {
   @Put('/admin/hotels/:id')
   @Roles(Role.Admin)
   @UseGuards(RolesGuard)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthenticatedGuard)
   updateHotel(@Param('id') id, @Body() data: newHotelDto) {
     return this.hotelService.update(id, data);
   }

@@ -6,7 +6,7 @@ import { searchUsersDto } from './dto/searchUsers.Dto';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/utils/roles.decorator';
 import { Role } from 'src/utils/role.enum';
-import { JwtAuthGuard } from 'src/guards/jwt.auth.guard';
+import { AuthenticatedGuard } from 'src/guards/authenticated.guard';
 
 @Controller()
 export class UsersController {
@@ -15,7 +15,7 @@ export class UsersController {
     @Post('/admin/users/')
     @Roles(Role.Admin)
     @UseGuards(RolesGuard)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(AuthenticatedGuard)
     public create(@Body() data: createUserDto) {
         const { email, password, name, contactPhone, role } = data;
         const passwordHash = bcript.hashSync(password, 10);
@@ -27,7 +27,7 @@ export class UsersController {
     @Get('/admin/users/')
     @Roles(Role.Admin)
     @UseGuards(RolesGuard)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(AuthenticatedGuard)
     public findAsAdmin(@Query() query: searchUsersDto) {
         return this.usersService.findAll(query);
     }
@@ -35,7 +35,7 @@ export class UsersController {
     @Get('/manager/users/')
     @Roles(Role.Manager)
     @UseGuards(RolesGuard)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(AuthenticatedGuard)
     public findAsManager(@Query() query: searchUsersDto) {
         return this.usersService.findAll(query);
     }

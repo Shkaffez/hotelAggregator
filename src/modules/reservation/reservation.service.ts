@@ -51,6 +51,7 @@ export class ReservationService implements IReservation {
     }
 
     async getCurrentUserReservations(id: ID): Promise<Reservation[]> {
+        id = new mongoose.Types.ObjectId(id)
         return await this.ReservationModel.find({ userId: id })
             .populate({ path: 'roomId', select: 'title description images' })
             .populate({ path: 'hotelId', select: 'title description' })

@@ -1,5 +1,6 @@
-import { Controller, Request, Post, UseGuards, Body, UseFilters } from '@nestjs/common';
-import { LocalAuthGuard } from 'src/guards/local.auth.guard';
+import { Controller, Request, Post, UseGuards, Body, UseFilters, Get, Res } from '@nestjs/common';
+import { Response } from 'express';
+import { LoginGuard } from 'src/guards/login.guard';
 import { createUserDto } from '../users/dto/createUser.Dto';
 import { AuthService } from './auth.service';
 import * as bcript from 'bcrypt';
@@ -10,10 +11,10 @@ import { MongoExceptionFilter } from 'src/utils/mongoExceptionFilter';
 export class AuthController {
   constructor(private authService: AuthService) { }
 
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(LoginGuard)
   @Post('/auth/login')
-  async login(@Request() req) {
-    return this.authService.login(req.user);
+  async login() {
+    return { status: 'login success ' };
   }
 
   @Post('/client/register')
@@ -25,5 +26,11 @@ export class AuthController {
 
     return this.authService.signup({ email, passwordHash, name, contactPhone });
 
+  }
+
+  @Get('/auth/logout')
+  logout(@Request() req, @Res() res: Response) {
+    req.logout();
+    res.redirect('/');
   }
 }

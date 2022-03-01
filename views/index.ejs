@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <script src="/socket.io/socket.io.js"></script>
+
+    <title>Socket.IO</title>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-4">
+                <div id="list" class="list-group">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="requestID">requestID</label>
+                    <input placeholder="requestID" type="text" id="request" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="text">message</label>
+                    <textarea placeholder="message" class="form-control" id="text"></textarea>
+                </div>
+                <!-- <button type="submit" id="send-all" class="btn btn-primary">all</button>
+                <button type="submit" id="send-me" class="btn btn-primary">me</button> -->
+                <button type="submit" id="subscribeToChat" class="btn btn-primary">subscribe to chat</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const jwtTokenField = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMDM2OGNjNjM0NDAwNGFmZjcyZGQwNyIsImVtYWlsIjoic2hpc2hrb3ZAbWFpbC5ydSIsIm5hbWUiOiJJdmFuIiwiaWF0IjoxNjQ1MjY4NTQ1fQ._v1RnpA2vK6BglwOVAjmnAx4QK8rH_cOeYweldkcOQY';
+        const socket = io('http://localhost:3000/api', { transports: ['websocket'], path: '/websocket-path', query: { jwtTokenField } });
+
+        const boxList = document.querySelector('#list');
+        const requestID = document.querySelector('#request');
+        // const inputText = document.querySelector('#text');
+        // const sendAll = document.querySelector('#send-all');
+        // const sendMe = document.querySelector('#send-me');
+        const subscribeToChat = document.querySelector('#subscribeToChat');
+
+        const getTmp = (msg) => {
+            return `
+                <div class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <small>${msg.author.name}</small>
+                    </div>
+                    <p class="mb-1">${msg.text}</p>
+                    <small>отправлено в ${msg.sentAt}</small>
+                </div>
+        `;
+        };
+
+        // socket.on('message-to-me', (msg) => {
+        //     const div = getTmp(msg);
+        //     boxList.insertAdjacentHTML('beforeend', div);
+        // });
+
+        // sendMe.addEventListener('click', () => {
+        //     socket.emit('message-to-me', {
+        //         username: inputUsername.value,
+        //         text: inputText.value,
+        //     });
+        // });
+
+
+        // socket.on('message-to-all', (msg) => {
+        //     const div = getTmp(msg);
+        //     boxList.insertAdjacentHTML('beforeend', div);
+        // });
+
+        // sendAll.addEventListener('click', () => {
+        //     socket.emit('message-to-all', {
+        //         username: inputUsername.value,
+        //         text: inputText.value,
+        //     });
+        // });
+
+
+        // socket.on('message-to-room', (msg) => {
+        //     const div = getTmp(msg);
+        //     boxList.insertAdjacentHTML('beforeend', div);
+        // });
+
+        // sendRoom.addEventListener('click', () => {
+        //     socket.emit('message-to-room', {
+        //         username: inputUsername.value,
+        //         text: inputText.value,
+        //     });
+        // });
+
+        socket.on('subscribeToChat', (msg) => {
+            console.log(msg)
+            msg.forEach((msg) => {
+                const div = getTmp(msg);
+                boxList.insertAdjacentHTML('beforeend', div);
+            });
+        })
+
+        subscribeToChat.addEventListener('click', () => {
+            socket.emit('subscribeToChat', requestID.value
+            );
+        });
+
+
+    </script>
+
+</body>
+
+</html>
