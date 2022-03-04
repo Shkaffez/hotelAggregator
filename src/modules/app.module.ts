@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Inject, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
@@ -9,6 +9,13 @@ import { ReservationModule } from './reservation/reservation.module';
 import { SupportModule } from './support/support.module';
 import { AuthModule } from './auth/auth.module';
 import { MulterModule } from '@nestjs/platform-express';
+
+import { RedisClient } from 'redis';
+import * as RedisStore from 'connect-redis';
+import * as session from 'express-session';
+import * as passport from 'passport';
+import { REDIS } from '../redis/redis.constants';
+import { RedisModule } from '../redis/redis.module';
 
 @Module({
   imports: [
@@ -21,9 +28,31 @@ import { MulterModule } from '@nestjs/platform-express';
     HotelsModule,
     ReservationModule,
     SupportModule,
-    AuthModule
+    AuthModule,
+    RedisModule
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule implements NestModule {
+  constructor(@Inject(REDIS) private readonly redis: RedisClient) { }
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(
+        session({
+          store: new (RedisStore(session))({ client: this.redis, logErrors: true }),
+          saveUninitialized: false,
+          secret: 'sup3rs3cr3t',
+          resave: false,
+          cookie: {
+            sameSite: true,
+            httpOnly: false,
+            maxAge: 60000,
+          },
+        }),
+        passport.initialize(),
+        passport.session(),
+      )
+      .forRoutes('*');
+  }
+}

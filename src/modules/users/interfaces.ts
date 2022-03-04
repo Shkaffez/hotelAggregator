@@ -9,7 +9,7 @@ export interface SearchUserParams {
   contactPhone: string;
 }
 export interface IUserService {
-  create(data: Partial<User>): Promise<Partial<User>>;
+  create(data: Partial<User>): Promise<Omit<User, 'passwordHash'>>;
   findById(id: ID): Promise<Partial<User>>;
   findByEmail(email: string): Promise<User>;
   findAll(params: SearchUserParams): Promise<Partial<User[]>>;

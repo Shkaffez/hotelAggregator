@@ -14,7 +14,7 @@ export class UsersService implements IUserService {
     @InjectConnection() private connection: Connection
   ) { }
 
-  async create(data: Partial<User>): Promise<Partial<User>> {
+  async create(data: Partial<User>): Promise<Omit<User, 'passwordHash'>> {
     const _id = new mongoose.Types.ObjectId();
     const { email, passwordHash, name, contactPhone, role } = data;
     const newUser = new this.UserModel({

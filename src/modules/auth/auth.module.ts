@@ -11,8 +11,10 @@ import { SessionSerializer } from './session.serializer';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-    PassportModule,
     ConfigModule.forRoot(),
+    PassportModule.register({
+      session: true,
+    }),
   ],
   providers: [AuthService, LocalStrategy, SessionSerializer],
   controllers: [AuthController],
