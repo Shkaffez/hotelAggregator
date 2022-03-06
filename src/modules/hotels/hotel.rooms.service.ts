@@ -18,14 +18,10 @@ export class HotelRoomsService implements HotelRoomService {
     const newHotelRoom = new this.HotelRoomModel({
       title, description, hotel, images
     });
-    try {
-      await newHotelRoom.save();
-      return await this.HotelRoomModel.findById({ _id: newHotelRoom._id })
-        .populate({ path: 'hotel', select: '_id title description' })
-        .select('_id title description images isEnabled hotel');
-    } catch (e) {
-      console.log(e);
-    }
+    await newHotelRoom.save();
+    return await this.HotelRoomModel.findById({ _id: newHotelRoom._id })
+      .populate({ path: 'hotel', select: '_id title description' })
+      .select('_id title description images isEnabled hotel');
   }
 
   async findById(id: ID, isEnabled?: true): Promise<HotelRoom> {
@@ -48,24 +44,16 @@ export class HotelRoomsService implements HotelRoomService {
 
   async search(params: SearchRoomsParams): Promise<HotelRoom[]> {
     let { limit, offset, id } = params;
-    try {
-      const rooms = await this.HotelRoomModel.find({ hotel: id }).populate({
-        path: 'hotel',
-        select: '_id title'
-      }).skip(offset).limit(limit).select('_id title images hotel').exec();
-      return rooms;
-    } catch (e) {
-      console.log(e);
-    }
+    const rooms = await this.HotelRoomModel.find({ hotel: id }).populate({
+      path: 'hotel',
+      select: '_id title'
+    }).skip(offset).limit(limit).select('_id title images hotel').exec();
+    return rooms;
   }
 
   async update(id: ID, data: Partial<HotelRoom>): Promise<HotelRoom> {
-    try {
-      return await this.HotelRoomModel.findByIdAndUpdate(id, data, { new: true })
-        .populate({ path: 'hotel', select: '_id title description' })
-        .select('_id title description images isEnabled hotel');
-    } catch (e) {
-      console.log(e);
-    }
+    return await this.HotelRoomModel.findByIdAndUpdate(id, data, { new: true })
+      .populate({ path: 'hotel', select: '_id title description' })
+      .select('_id title description images isEnabled hotel');
   }
 }

@@ -18,39 +18,24 @@ export class HotelsService implements IHotelService {
     const newHotel = new this.HotelModel({
       title, description, updateAt
     });
-    try {
-      await newHotel.save();
-      return await this.HotelModel.findById({ _id: newHotel._id }).select('_id title description');
-    } catch (e) {
-      console.log(e);
-    }
+    await newHotel.save();
+    return await this.HotelModel.findById({ _id: newHotel._id }).select('_id title description');
   }
 
   async update(id: string, data: any): Promise<Hotel> {
     const { title, description } = data;
     const updateAt = new Date();
-    try {
-      return await this.HotelModel.findByIdAndUpdate(id, { title, description, updateAt }, { new: true })
-        .select('_id title description');
-    } catch (e) {
-      console.log(e);
-    }
+    return await this.HotelModel.findByIdAndUpdate(id, { title, description, updateAt }, { new: true })
+      .select('_id title description');
   }
 
   async findById(id: ID): Promise<Hotel> {
-    try {
-      return await this.HotelModel.findById({ _id: id })
-    } catch (e) {
-      console.log(e);
-    }
+    return await this.HotelModel.findById({ _id: id })
   }
 
   async search(params: SearchHotelsParams): Promise<Hotel[]> {
     const { limit, offset } = params;
-    try {
-      return await this.HotelModel.find().skip(offset).limit(limit).select('_id title description');
-    } catch (e) {
-      console.log(e);
-    }
+    return await this.HotelModel.find().skip(offset).limit(limit).select('_id title description');
+
   }
 }

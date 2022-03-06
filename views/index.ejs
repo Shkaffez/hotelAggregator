@@ -16,9 +16,7 @@
 
         <div class="row">
             <div class="col-4">
-                <div id="list" class="list-group">
-
-                </div>
+                <div id="list" class="list-group"></div>
             </div>
         </div>
 
@@ -32,8 +30,7 @@
                     <label for="text">message</label>
                     <textarea placeholder="message" class="form-control" id="text"></textarea>
                 </div>
-                <!-- <button type="submit" id="send-all" class="btn btn-primary">all</button>
-                <button type="submit" id="send-me" class="btn btn-primary">me</button> -->
+                <button type="submit" id="sendMessage" class="btn btn-primary">me</button>
                 <button type="submit" id="subscribeToChat" class="btn btn-primary">subscribe to chat</button>
             </div>
         </div>
@@ -41,14 +38,11 @@
     </div>
 
     <script>
-        const jwtTokenField = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMDM2OGNjNjM0NDAwNGFmZjcyZGQwNyIsImVtYWlsIjoic2hpc2hrb3ZAbWFpbC5ydSIsIm5hbWUiOiJJdmFuIiwiaWF0IjoxNjQ1MjY4NTQ1fQ._v1RnpA2vK6BglwOVAjmnAx4QK8rH_cOeYweldkcOQY';
-        const socket = io('http://localhost:3000/api', { transports: ['websocket'], path: '/websocket-path', query: { jwtTokenField } });
 
         const boxList = document.querySelector('#list');
         const requestID = document.querySelector('#request');
-        // const inputText = document.querySelector('#text');
-        // const sendAll = document.querySelector('#send-all');
-        // const sendMe = document.querySelector('#send-me');
+        const inputText = document.querySelector('#text');
+        const sendMessage = document.querySelector('#sendMessage');
         const subscribeToChat = document.querySelector('#subscribeToChat');
 
         const getTmp = (msg) => {
@@ -62,47 +56,9 @@
                 </div>
         `;
         };
-
-        // socket.on('message-to-me', (msg) => {
-        //     const div = getTmp(msg);
-        //     boxList.insertAdjacentHTML('beforeend', div);
-        // });
-
-        // sendMe.addEventListener('click', () => {
-        //     socket.emit('message-to-me', {
-        //         username: inputUsername.value,
-        //         text: inputText.value,
-        //     });
-        // });
-
-
-        // socket.on('message-to-all', (msg) => {
-        //     const div = getTmp(msg);
-        //     boxList.insertAdjacentHTML('beforeend', div);
-        // });
-
-        // sendAll.addEventListener('click', () => {
-        //     socket.emit('message-to-all', {
-        //         username: inputUsername.value,
-        //         text: inputText.value,
-        //     });
-        // });
-
-
-        // socket.on('message-to-room', (msg) => {
-        //     const div = getTmp(msg);
-        //     boxList.insertAdjacentHTML('beforeend', div);
-        // });
-
-        // sendRoom.addEventListener('click', () => {
-        //     socket.emit('message-to-room', {
-        //         username: inputUsername.value,
-        //         text: inputText.value,
-        //     });
-        // });
+        const socket = io('http://localhost:3000');
 
         socket.on('subscribeToChat', (msg) => {
-            console.log(msg)
             msg.forEach((msg) => {
                 const div = getTmp(msg);
                 boxList.insertAdjacentHTML('beforeend', div);
@@ -110,8 +66,19 @@
         })
 
         subscribeToChat.addEventListener('click', () => {
-            socket.emit('subscribeToChat', requestID.value
-            );
+            socket.emit('subscribeToChat', requestID.value);
+        });
+
+        socket.on('sendMessage', (msg) => {
+            const div = getTmp(msg);
+            boxList.insertAdjacentHTML('beforeend', div);
+        })
+
+        sendMessage.addEventListener('click', () => {
+            socket.emit('sendMessage', {
+                supportRequest: requestID.value,
+                text: inputText.value,
+            });
         });
 
 

@@ -18,58 +18,36 @@ export class UsersService implements IUserService {
     const _id = new mongoose.Types.ObjectId();
     const { email, passwordHash, name, contactPhone, role } = data;
     const newUser = new this.UserModel({
-      _id,
-      email,
-      passwordHash,
-      name,
+      _id, email, passwordHash, name,
       contactPhone,
       role
     });
-    try {
-      await newUser.save();
-      return {
-        _id,
-        email,
-        name,
-        contactPhone,
-        role,
-      }
-    } catch (e) {
-      console.error(e);
-    }
+
+    await newUser.save();
+    return { _id, email, name, contactPhone, role }
+
 
   }
   async findById(id: ID): Promise<Partial<User>> {
-    try {
-      const user = await this.UserModel.findById(id);
-      return {
-        _id: user._id,
-        email: user.email,
-        name: user.name,
-        contactPhone: user.contactPhone
-      }
-    } catch (e) {
-      console.log(e);
+    const user = await this.UserModel.findById(id);
+    return {
+      _id: user._id,
+      email: user.email,
+      name: user.name,
+      contactPhone: user.contactPhone
     }
   }
-  async findByEmail(email: string): Promise<User> {
-    try {
-      return await this.UserModel.findOne({ email: email });
 
-    } catch (e) {
-      console.log(e);
-    }
+  async findByEmail(email: string): Promise<User> {
+    return await this.UserModel.findOne({ email: email });
   }
+
   async findAll(params: SearchUserParams): Promise<Partial<User[]>> {
     const { limit, offset } = params;
     const filters = searchFilters(params);
-    try {
-      const users = await this.UserModel.find({
-        ...filters
-      }).skip(offset).limit(limit).select('_id email name contactPhone');
-      return users;
-    } catch (e) {
-      console.log(e);
-    }
+    const users = await this.UserModel.find({
+      ...filters
+    }).skip(offset).limit(limit).select('_id email name contactPhone');
+    return users;
   }
 }

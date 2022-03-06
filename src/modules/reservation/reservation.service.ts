@@ -15,16 +15,12 @@ export class ReservationService implements IReservation {
 
     async addReservation(data: ReservationDto): Promise<Reservation> {
         const newReservation = new this.ReservationModel(data);
-        try {
-            await newReservation.save();
-            const reservInfo = await this.ReservationModel.findById({ _id: newReservation._id })
-                .populate({ path: 'roomId', select: 'title description images' })
-                .populate({ path: 'hotelId', select: 'title description' })
-                .select('dateStart dateEnd hotelRoom hotel').exec();
-            return reservInfo;
-        } catch (e) {
-            console.log(e);
-        }
+        await newReservation.save();
+        const reservInfo = await this.ReservationModel.findById({ _id: newReservation._id })
+            .populate({ path: 'roomId', select: 'title description images' })
+            .populate({ path: 'hotelId', select: 'title description' })
+            .select('dateStart dateEnd hotelRoom hotel').exec();
+        return reservInfo;
     }
 
     async removeReservation(id: ID): Promise<void> {
