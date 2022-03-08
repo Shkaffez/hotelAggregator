@@ -1,12 +1,12 @@
-import { IsBoolean, IsNumber } from "class-validator";
+import { IsBoolean, IsNumber } from 'class-validator';
 
-export class getSupportRequestsDto {
-    @IsNumber()
-    limit: number;
+export class GetSupportRequestsDto {
+  @IsNumber()
+  limit: number;
 
-    @IsNumber()
-    offset: number;
+  @IsNumber()
+  offset: number;
 
-    @IsBoolean()
-    isActive: boolean;
+  @IsBoolean()
+  isActive: boolean;
 }

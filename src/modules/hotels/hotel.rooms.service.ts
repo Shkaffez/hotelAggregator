@@ -9,14 +9,18 @@ import * as mongoose from 'mongoose';
 @Injectable()
 export class HotelRoomsService implements HotelRoomService {
   constructor(
-    @InjectModel(HotelRoom.name) private readonly HotelRoomModel: Model<HotelRoomDocument>,
-    @InjectConnection() private connection: Connection
+    @InjectModel(HotelRoom.name)
+    private readonly HotelRoomModel: Model<HotelRoomDocument>,
+    @InjectConnection() private connection: Connection,
   ) { }
 
   async create(data: Partial<HotelRoom>): Promise<HotelRoom> {
     const { title, description, hotel, images } = data;
     const newHotelRoom = new this.HotelRoomModel({
-      title, description, hotel, images
+      title,
+      description,
+      hotel,
+      images,
     });
     await newHotelRoom.save();
     return await this.HotelRoomModel.findById({ _id: newHotelRoom._id })
@@ -28,26 +32,33 @@ export class HotelRoomsService implements HotelRoomService {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new HttpException('not valid id', HttpStatus.BAD_REQUEST);
     }
-    const room = await this.HotelRoomModel.findById({ _id: id }).populate({
-      path: 'hotel',
-      select: '_id title description'
-    }).select('_id title description images hotel').exec();
+    const room = await this.HotelRoomModel.findById({ _id: id })
+      .populate({
+        path: 'hotel',
+        select: '_id title description',
+      })
+      .select('_id title description images hotel')
+      .exec();
     if (!room) {
-      throw new HttpException('this id not exist', HttpStatus.BAD_REQUEST);
+      throw new HttpException('this id not exist', HttpStatus.NOT_FOUND);
     }
     if (room.isEnabled === false) {
-      throw new HttpException('this id is not enabled', HttpStatus.BAD_REQUEST);
+      throw new HttpException('this room is not enabled', HttpStatus.BAD_REQUEST);
     }
     return room;
-
   }
 
   async search(params: SearchRoomsParams): Promise<HotelRoom[]> {
     let { limit, offset, id } = params;
-    const rooms = await this.HotelRoomModel.find({ hotel: id }).populate({
-      path: 'hotel',
-      select: '_id title'
-    }).skip(offset).limit(limit).select('_id title images hotel').exec();
+    const rooms = await this.HotelRoomModel.find({ hotel: id })
+      .populate({
+        path: 'hotel',
+        select: '_id title',
+      })
+      .skip(offset)
+      .limit(limit)
+      .select('_id title images hotel')
+      .exec();
     return rooms;
   }
 

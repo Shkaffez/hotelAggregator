@@ -15,9 +15,8 @@ import { AuthWSGuard } from 'src/guards/authWS.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Role } from 'src/utils/role.enum';
 import { Roles } from 'src/utils/roles.decorator';
-import { sendMessageWSDto } from './dto/sendMessage.WS.dto';
+import { SendMessageWSDto } from './dto/sendMessage.WS.dto';
 import { SupportService } from './support.service';
-
 
 @WebSocketGateway()
 export class ChatGateway {
@@ -31,18 +30,25 @@ export class ChatGateway {
   @UseGuards(AuthWSGuard)
   async getChatHistory(@MessageBody() supportRequest: string, @Request() req) {
     const author = req.user._doc;
-    const request = await this.supportService.getMessages(supportRequest, author);
-    this.server.emit('subscribeToChat', request)
+    const request = await this.supportService.getMessages(
+      supportRequest,
+      author,
+    );
+    this.server.emit('subscribeToChat', request);
   }
 
   @SubscribeMessage('sendMessage')
   @Roles(Role.Client, Role.Manager)
   @UseGuards(RolesGuard)
   @UseGuards(AuthWSGuard)
-  async sendMessage(@MessageBody() data: sendMessageWSDto, @Request() req) {
+  async sendMessage(@MessageBody() data: SendMessageWSDto, @Request() req) {
     const { supportRequest, text } = data;
     const author = req.user._doc;
-    const response = this.supportService.sendMessage({ author, supportRequest, text });
-    this.server.emit('sendMessage', response)
+    const response = this.supportService.sendMessage({
+      author,
+      supportRequest,
+      text,
+    });
+    this.server.emit('sendMessage', response);
   }
 }

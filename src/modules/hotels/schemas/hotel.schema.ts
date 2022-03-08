@@ -6,17 +6,17 @@ export type HotelDocument = Hotel & Document;
 
 @Schema()
 export class Hotel {
-    @Prop({ required: true })
-    title: string;
+  @Prop({ required: true })
+  title: string;
 
-    @Prop()
-    description: string;
+  @Prop()
+  description: string;
 
-    @Prop({ required: true, default: new Date() })
-    createdAt: Date;
+  @Prop({ required: true, default: new Date() })
+  createdAt: Date;
 
-    @Prop()
-    updatedAt: Date;
+  @Prop()
+  updatedAt: Date;
 }
 
 export const HotelSchema = SchemaFactory.createForClass(Hotel);

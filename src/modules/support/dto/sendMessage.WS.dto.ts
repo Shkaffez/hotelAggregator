@@ -1,9 +1,9 @@
-import { IsString } from "class-validator";
+import { IsString } from 'class-validator';
 
-export class sendMessageWSDto {
-    @IsString()
-    supportRequest: string;
+export class SendMessageWSDto {
+  @IsString()
+  supportRequest: string;
 
-    @IsString()
-    text: string;
+  @IsString()
+  text: string;
 }

@@ -1,6 +1,6 @@
-import { IsString } from "class-validator";
+import { IsString } from 'class-validator';
 
-export class newSupportRequestDto {
-    @IsString()
-    text: string;
+export class NewSupportRequestDto {
+  @IsString()
+  text: string;
 }

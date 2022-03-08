@@ -2,7 +2,6 @@ import { Inject, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { HotelsModule } from './hotels/hotels.module';
 import { ReservationModule } from './reservation/reservation.module';
@@ -20,7 +19,9 @@ import { RedisModule } from '../redis/redis.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    MongooseModule.forRoot("mongodb+srv://shishkov-i:12qwaszx@cluster0.x7d8w.mongodb.net/hoyelAggregator?retryWrites=true&w=majority"),
+    MongooseModule.forRoot(
+      'mongodb+srv://shishkov-i:12qwaszx@cluster0.x7d8w.mongodb.net/hoyelAggregator?retryWrites=true&w=majority',
+    ),
     MulterModule.register({
       dest: './files',
     }),
@@ -29,10 +30,9 @@ import { RedisModule } from '../redis/redis.module';
     ReservationModule,
     SupportModule,
     AuthModule,
-    RedisModule
+    RedisModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule implements NestModule {
   constructor(@Inject(REDIS) private readonly redis: RedisClient) { }
@@ -40,9 +40,12 @@ export class AppModule implements NestModule {
     consumer
       .apply(
         session({
-          store: new (RedisStore(session))({ client: this.redis, logErrors: true }),
+          store: new (RedisStore(session))({
+            client: this.redis,
+            logErrors: true,
+          }),
           saveUninitialized: false,
-          secret: 'sup3rs3cr3t',
+          secret: process.env.SESSION_SECRET,
           resave: false,
           cookie: {
             sameSite: true,

@@ -1,14 +1,13 @@
-import { IsString } from "class-validator";
-import { ID } from "src/modules/id.type";
+import { IsString } from 'class-validator';
+import { ID } from 'src/modules/id.type';
 
-export class newRoomDto {
+export class NewRoomDto {
+  @IsString()
+  title: string;
 
-    @IsString()
-    title: string;
+  @IsString()
+  description: string;
 
-    @IsString()
-    description: string;
-
-    @IsString()
-    hotelId: ID;
+  @IsString()
+  hotelId: ID;
 }

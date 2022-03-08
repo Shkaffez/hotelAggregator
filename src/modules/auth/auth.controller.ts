@@ -1,11 +1,19 @@
-import { Controller, Request, Post, UseGuards, Body, UseFilters, Get, Res } from '@nestjs/common';
+import {
+  Controller,
+  Request,
+  Post,
+  UseGuards,
+  Body,
+  UseFilters,
+  Get,
+  Res,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { LoginGuard } from 'src/guards/login.guard';
-import { createUserDto } from '../users/dto/createUser.Dto';
+import { CreateUserDto } from '../users/dto/createUser.Dto';
 import { AuthService } from './auth.service';
 import * as bcript from 'bcrypt';
 import { MongoExceptionFilter } from 'src/utils/mongoExceptionFilter';
-
 
 @Controller()
 export class AuthController {
@@ -19,18 +27,16 @@ export class AuthController {
 
   @Post('/client/register')
   @UseFilters(MongoExceptionFilter)
-  async singup(
-    @Body() data: createUserDto) {
+  async singup(@Body() data: CreateUserDto) {
     const { email, password, name, contactPhone } = data;
     const passwordHash = bcript.hashSync(password, 10);
 
     return this.authService.signup({ email, passwordHash, name, contactPhone });
-
   }
 
   @Get('/auth/logout')
   logout(@Request() req, @Res() res: Response) {
     req.logout();
-    res.redirect('/');
+    return { status: 'logout' };
   }
 }

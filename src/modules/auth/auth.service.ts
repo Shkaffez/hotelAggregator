@@ -13,7 +13,7 @@ export class AuthService {
   constructor(
     @InjectModel(User.name) private readonly UserModel: Model<UserDocument>,
     @InjectConnection() private connection: Connection,
-  ) { }
+  ) {}
 
   public async signup(data: Partial<User>): Promise<Partial<User>> {
     const _id = new mongoose.Types.ObjectId();
@@ -23,17 +23,19 @@ export class AuthService {
       email,
       passwordHash,
       name,
-      contactPhone
+      contactPhone,
     });
     await newUser.save();
-    return { _id, email, name }
+    return { _id, email, name };
   }
 
   public async validateUserforLocal(authUserData: authUserDto): Promise<any> {
     const { email, password } = authUserData;
 
     try {
-      const user = await (await this.UserModel.findOne({ email: email })).toObject();
+      const user = await (
+        await this.UserModel.findOne({ email: email })
+      ).toObject();
       if (user && bcript.compareSync(password, user.passwordHash)) {
         const { passwordHash, ...result } = user;
         return result;

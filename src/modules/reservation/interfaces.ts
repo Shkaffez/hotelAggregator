@@ -1,5 +1,5 @@
-import { ID } from "../id.type";
-import { Reservation } from "./schemas/reservation.schema";
+import { ID } from '../id.type';
+import { Reservation } from './schemas/reservation.schema';
 
 export interface ReservationDto {
   userId: ID;
@@ -18,6 +18,6 @@ export interface IReservation {
   addReservation(data: ReservationDto): Promise<Reservation>;
   removeReservation(id: ID): Promise<void>;
   getReservations(
-    filter: ReservationSearchOptions
+    filter: ReservationSearchOptions,
   ): Promise<Array<Reservation>>;
 }

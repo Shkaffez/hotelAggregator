@@ -19,4 +19,4 @@ import { SessionSerializer } from './session.serializer';
   providers: [AuthService, LocalStrategy, SessionSerializer],
   controllers: [AuthController],
 })
-export class AuthModule { }
+export class AuthModule {}

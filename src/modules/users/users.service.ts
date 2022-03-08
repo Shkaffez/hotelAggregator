@@ -11,22 +11,23 @@ import { searchFilters } from 'src/utils/helpers';
 export class UsersService implements IUserService {
   constructor(
     @InjectModel(User.name) private readonly UserModel: Model<UserDocument>,
-    @InjectConnection() private connection: Connection
-  ) { }
+    @InjectConnection() private connection: Connection,
+  ) {}
 
   async create(data: Partial<User>): Promise<Omit<User, 'passwordHash'>> {
     const _id = new mongoose.Types.ObjectId();
     const { email, passwordHash, name, contactPhone, role } = data;
     const newUser = new this.UserModel({
-      _id, email, passwordHash, name,
+      _id,
+      email,
+      passwordHash,
+      name,
       contactPhone,
-      role
+      role,
     });
 
     await newUser.save();
-    return { _id, email, name, contactPhone, role }
-
-
+    return { _id, email, name, contactPhone, role };
   }
   async findById(id: ID): Promise<Partial<User>> {
     const user = await this.UserModel.findById(id);
@@ -34,8 +35,8 @@ export class UsersService implements IUserService {
       _id: user._id,
       email: user.email,
       name: user.name,
-      contactPhone: user.contactPhone
-    }
+      contactPhone: user.contactPhone,
+    };
   }
 
   async findByEmail(email: string): Promise<User> {
@@ -46,8 +47,11 @@ export class UsersService implements IUserService {
     const { limit, offset } = params;
     const filters = searchFilters(params);
     const users = await this.UserModel.find({
-      ...filters
-    }).skip(offset).limit(limit).select('_id email name contactPhone');
+      ...filters,
+    })
+      .skip(offset)
+      .limit(limit)
+      .select('_id email name contactPhone');
     return users;
   }
 }

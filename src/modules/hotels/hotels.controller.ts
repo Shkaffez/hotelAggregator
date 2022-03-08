@@ -1,6 +1,15 @@
 import {
-  Body, Controller, Get, Param, Post, Put, Query,
-  UploadedFiles, UseGuards, UseInterceptors, Request
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UploadedFiles,
+  UseGuards,
+  UseInterceptors,
+  Request,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -10,11 +19,11 @@ import { editFileName } from 'src/utils/file-uploading.utils';
 import { imageFileFilter } from 'src/utils/imageFileFilter';
 import { Role } from 'src/utils/role.enum';
 import { Roles } from 'src/utils/roles.decorator';
-import { newHotelDto } from './dto/newHotel.Dto';
-import { newRoomDto } from './dto/newRoom.Dto';
-import { searchHotelsDto } from './dto/searchHotels.Dto';
-import { searchRoomsDto } from './dto/searchRooms.Dto';
-import { updateRoomDto } from './dto/updateRoom.Dto';
+import { NewHotelDto } from './dto/newHotel.Dto';
+import { NewRoomDto } from './dto/newRoom.Dto';
+import { SearchHotelsDto } from './dto/searchHotels.Dto';
+import { SearchRoomsDto } from './dto/searchRooms.Dto';
+import { UpdateRoomDto } from './dto/updateRoom.Dto';
 import { HotelRoomsService } from './hotel.rooms.service';
 import { HotelsService } from './hotels.service';
 
@@ -22,11 +31,11 @@ import { HotelsService } from './hotels.service';
 export class HotelsController {
   constructor(
     private readonly hotelService: HotelsService,
-    private readonly hotelRoomService: HotelRoomsService
+    private readonly hotelRoomService: HotelRoomsService,
   ) { }
 
   @Get('/common/hotel-rooms')
-  searchRooms(@Query() data: searchRoomsDto) {
+  searchRooms(@Query() data: SearchRoomsDto) {
     return this.hotelRoomService.search(data);
   }
 
@@ -39,7 +48,7 @@ export class HotelsController {
   @Roles(Role.Admin)
   @UseGuards(RolesGuard)
   @UseGuards(AuthenticatedGuard)
-  addNewHotel(@Body() data: newHotelDto) {
+  addNewHotel(@Body() data: NewHotelDto) {
     return this.hotelService.create(data);
   }
 
@@ -47,7 +56,7 @@ export class HotelsController {
   @Roles(Role.Admin)
   @UseGuards(RolesGuard)
   @UseGuards(AuthenticatedGuard)
-  searchHotels(@Query() data: searchHotelsDto) {
+  searchHotels(@Query() data: SearchHotelsDto) {
     return this.hotelService.search(data);
   }
 
@@ -55,58 +64,62 @@ export class HotelsController {
   @Roles(Role.Admin)
   @UseGuards(RolesGuard)
   @UseGuards(AuthenticatedGuard)
-  updateHotel(@Param('id') id, @Body() data: newHotelDto) {
+  updateHotel(@Param('id') id, @Body() data: NewHotelDto) {
     return this.hotelService.update(id, data);
   }
 
   @Post('/admin/hotel-rooms/')
-  @UseInterceptors(FilesInterceptor('files', 10, {
-    storage: diskStorage({
-      destination: './files',
-      filename: editFileName,
+  @UseInterceptors(
+    FilesInterceptor('files', 10, {
+      storage: diskStorage({
+        destination: './files',
+        filename: editFileName,
+      }),
+      fileFilter: imageFileFilter,
     }),
-    fileFilter: imageFileFilter,
-  }))
+  )
   addNewRoom(
-    @Body() body: newRoomDto,
-    @UploadedFiles() files: Array<Express.Multer.File>
+    @Body() body: NewRoomDto,
+    @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
     const { title, hotelId, description } = body;
     let images = [];
-    files.forEach(file => images.push(file.filename));
+    files.forEach((file) => images.push(file.filename));
     return this.hotelRoomService.create({
       title,
       hotel: hotelId,
       description,
-      images: images
-    })
+      images: images,
+    });
   }
 
   @Put('/admin/hotel-rooms/:id')
-  @UseInterceptors(FilesInterceptor('files', 10, {
-    storage: diskStorage({
-      destination: './files',
-      filename: editFileName,
+  @UseInterceptors(
+    FilesInterceptor('files', 10, {
+      storage: diskStorage({
+        destination: './files',
+        filename: editFileName,
+      }),
+      fileFilter: imageFileFilter,
     }),
-    fileFilter: imageFileFilter,
-  }))
+  )
   updateRoom(
-    @Body() body: updateRoomDto,
+    @Body() body: UpdateRoomDto,
     @Param('id') id,
-    @UploadedFiles() files: Array<Express.Multer.File>
+    @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
     const { title, hotelId, description, imageFiles, isEnabled } = body;
     let images = [];
-    files.forEach(file => images.push(file.filename));
+    files.forEach((file) => images.push(file.filename));
     if (imageFiles.length > 0) {
-      imageFiles.forEach(file => images.push(file));
+      imageFiles.forEach((file) => images.push(file));
     }
     return this.hotelRoomService.update(id, {
       title,
       hotel: hotelId,
       description,
       isEnabled,
-      images: images
+      images: images,
     });
   }
 }

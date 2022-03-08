@@ -1,9 +1,9 @@
-import { IsNumber, IsString } from "class-validator";
+import { IsNumber, IsString } from 'class-validator';
 
-export class searchHotelsDto {
-    @IsNumber()
-    public readonly limit: number;
+export class SearchHotelsDto {
+  @IsNumber()
+  public readonly limit: number;
 
-    @IsNumber()
-    public readonly offset: number;
+  @IsNumber()
+  public readonly offset: number;
 }
