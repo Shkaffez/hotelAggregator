@@ -15,7 +15,9 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/utils/roles.decorator';
 import { Role } from 'src/utils/role.enum';
 import { AuthenticatedGuard } from 'src/guards/authenticated.guard';
+import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Users')
 @Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
@@ -24,6 +26,7 @@ export class UsersController {
   @Roles(Role.Admin)
   @UseGuards(RolesGuard)
   @UseGuards(AuthenticatedGuard)
+  @ApiBody({ type: CreateUserDto })
   public create(@Body() data: CreateUserDto) {
     const { email, password, name, contactPhone, role } = data;
     const passwordHash = bcript.hashSync(password, 10);

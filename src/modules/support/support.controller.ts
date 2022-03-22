@@ -8,6 +8,7 @@ import {
   Get,
   Param,
 } from '@nestjs/common';
+import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AuthenticatedGuard } from 'src/guards/authenticated.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Role } from 'src/utils/role.enum';
@@ -18,6 +19,7 @@ import { SupportClientService } from './support.client.service';
 import { SupportEmployeeService } from './support.employee.service';
 import { SupportService } from './support.service';
 
+@ApiTags('Support')
 @Controller()
 export class SupportController {
   constructor(
@@ -30,6 +32,7 @@ export class SupportController {
   @Roles(Role.Client)
   @UseGuards(RolesGuard)
   @UseGuards(AuthenticatedGuard)
+  @ApiBody({ type: NewSupportRequestDto })
   async createSupportRequest(
     @Body() data: NewSupportRequestDto,
     @Request() req,
@@ -52,6 +55,7 @@ export class SupportController {
   @Roles(Role.Client)
   @UseGuards(RolesGuard)
   @UseGuards(AuthenticatedGuard)
+  @ApiQuery({ type: GetSupportRequestsDto })
   async getClientSupportRequests(
     @Request() req,
     @Query() data: GetSupportRequestsDto,
@@ -68,6 +72,7 @@ export class SupportController {
   @Roles(Role.Client, Role.Manager)
   @UseGuards(RolesGuard)
   @UseGuards(AuthenticatedGuard)
+  @ApiBody({ type: NewSupportRequestDto })
   async sendMessage(
     @Param('id') supportRequest,
     @Body() data: NewSupportRequestDto,
@@ -86,6 +91,7 @@ export class SupportController {
   @Roles(Role.Client)
   @UseGuards(RolesGuard)
   @UseGuards(AuthenticatedGuard)
+  @ApiQuery({ type: GetSupportRequestsDto })
   async getManagerSupportRequests(@Query() data: GetSupportRequestsDto) {
     const response =
       await this.supportEmployeeService.getManagerSupportRequests(data);

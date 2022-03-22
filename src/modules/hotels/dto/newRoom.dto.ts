@@ -12,6 +12,6 @@ export class NewRoomDto {
   description: string;
 
   @IsString()
-  @ApiProperty()
+  @ApiProperty({ type: String })
   hotelId: ID;
 }

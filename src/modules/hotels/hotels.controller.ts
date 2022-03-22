@@ -12,6 +12,7 @@ import {
   Request,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { ApiTags } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
 import { AuthenticatedGuard } from 'src/guards/authenticated.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
@@ -19,14 +20,15 @@ import { editFileName } from 'src/utils/file-uploading.utils';
 import { imageFileFilter } from 'src/utils/imageFileFilter';
 import { Role } from 'src/utils/role.enum';
 import { Roles } from 'src/utils/roles.decorator';
-import { NewHoteldto } from './dto/newHotel.dto';
-import { NewRoomdto } from './dto/newRoom.dto';
-import { SearchHotelsdto } from './dto/searchHotels.dto';
-import { SearchRoomsdto } from './dto/searchRooms.dto';
-import { UpdateRoomdto } from './dto/updateRoom.dto';
+import { NewHotelDto } from './dto/newHotel.dto';
+import { NewRoomDto } from './dto/newRoom.dto';
+import { SearchHotelsDto } from './dto/searchHotels.dto';
+import { SearchRoomsDto } from './dto/searchRooms.dto';
+import { UpdateRoomDto } from './dto/updateRoom.dto';
 import { HotelRoomsService } from './hotel.rooms.service';
 import { HotelsService } from './hotels.service';
 
+@ApiTags('Hotel')
 @Controller()
 export class HotelsController {
   constructor(
@@ -35,7 +37,7 @@ export class HotelsController {
   ) { }
 
   @Get('/common/hotel-rooms')
-  searchRooms(@Query() data: SearchRoomsdto) {
+  searchRooms(@Query() data: SearchRoomsDto) {
     return this.hotelRoomService.search(data);
   }
 
@@ -48,7 +50,7 @@ export class HotelsController {
   @Roles(Role.Admin)
   @UseGuards(RolesGuard)
   @UseGuards(AuthenticatedGuard)
-  addNewHotel(@Body() data: NewHoteldto) {
+  addNewHotel(@Body() data: NewHotelDto) {
     return this.hotelService.create(data);
   }
 
@@ -56,7 +58,7 @@ export class HotelsController {
   @Roles(Role.Admin)
   @UseGuards(RolesGuard)
   @UseGuards(AuthenticatedGuard)
-  searchHotels(@Query() data: SearchHotelsdto) {
+  searchHotels(@Query() data: SearchHotelsDto) {
     return this.hotelService.search(data);
   }
 
@@ -64,7 +66,7 @@ export class HotelsController {
   @Roles(Role.Admin)
   @UseGuards(RolesGuard)
   @UseGuards(AuthenticatedGuard)
-  updateHotel(@Param('id') id, @Body() data: NewHoteldto) {
+  updateHotel(@Param('id') id, @Body() data: NewHotelDto) {
     return this.hotelService.update(id, data);
   }
 
@@ -79,7 +81,7 @@ export class HotelsController {
     }),
   )
   addNewRoom(
-    @Body() body: NewRoomdto,
+    @Body() body: NewRoomDto,
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
     const { title, hotelId, description } = body;
@@ -104,7 +106,7 @@ export class HotelsController {
     }),
   )
   updateRoom(
-    @Body() body: UpdateRoomdto,
+    @Body() body: UpdateRoomDto,
     @Param('id') id,
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {

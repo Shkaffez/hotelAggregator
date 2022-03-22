@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
 import { InjectConnection } from '@nestjs/mongoose';
-import { AuthUserdto } from './dto/authUser.dto';
+import { AuthUserDto } from './dto/authUser.dto';
 import * as bcript from 'bcrypt';
 import { User, UserDocument } from '../users/schemas/user.schema';
 import * as mongoose from 'mongoose';
@@ -29,7 +29,7 @@ export class AuthService {
     return { _id, email, name };
   }
 
-  public async validateUserforLocal(authUserData: AuthUserdto): Promise<any> {
+  public async validateUserforLocal(authUserData: AuthUserDto): Promise<any> {
     const { email, password } = authUserData;
 
     try {

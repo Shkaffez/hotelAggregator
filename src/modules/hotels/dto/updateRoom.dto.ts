@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsBoolean, IsOptional, IsString } from 'class-validator';
 import { ID } from 'src/modules/id.type';
 
@@ -12,6 +13,7 @@ export class UpdateRoomDto {
 
   @IsString()
   @IsOptional()
+  @ApiProperty({ type: String })
   hotelId: ID;
 
   @IsBoolean()

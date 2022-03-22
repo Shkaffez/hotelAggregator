@@ -15,7 +15,7 @@ import { AuthWSGuard } from 'src/guards/authWS.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Role } from 'src/utils/role.enum';
 import { Roles } from 'src/utils/roles.decorator';
-import { SendMessageWSdto } from './dto/sendMessage.WS.dto';
+import { SendMessageWSDto } from './dto/sendMessage.WS.dto';
 import { SupportService } from './support.service';
 
 @WebSocketGateway()
@@ -41,7 +41,7 @@ export class ChatGateway {
   @Roles(Role.Client, Role.Manager)
   @UseGuards(RolesGuard)
   @UseGuards(AuthWSGuard)
-  async sendMessage(@MessageBody() data: SendMessageWSdto, @Request() req) {
+  async sendMessage(@MessageBody() data: SendMessageWSDto, @Request() req) {
     const { supportRequest, text } = data;
     const author = req.user._doc;
     const response = this.supportService.sendMessage({

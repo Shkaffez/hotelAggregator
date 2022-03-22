@@ -8,6 +8,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { AuthenticatedGuard } from 'src/guards/authenticated.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Role } from 'src/utils/role.enum';
@@ -16,6 +17,7 @@ import { HotelRoomsService } from '../hotels/hotel.rooms.service';
 import { NewReservationDto } from './dto/newReservation.dto';
 import { ReservationService } from './reservation.service';
 
+@ApiTags('Reservation')
 @Controller()
 export class ReservationController {
   constructor(
