@@ -12,8 +12,8 @@ import { AuthenticatedGuard } from 'src/guards/authenticated.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Role } from 'src/utils/role.enum';
 import { Roles } from 'src/utils/roles.decorator';
-import { getSupportRequestsDto } from './dto/getSupportRequests.dto';
-import { newSupportRequestDto } from './dto/newSupportRequest.dto';
+import { GetSupportRequestsDto } from './dto/getSupportRequests.dto';
+import { NewSupportRequestDto } from './dto/newSupportRequest.dto';
 import { SupportClientService } from './support.client.service';
 import { SupportEmployeeService } from './support.employee.service';
 import { SupportService } from './support.service';
@@ -24,14 +24,14 @@ export class SupportController {
     private readonly supportService: SupportService,
     private readonly supportEmployeeService: SupportEmployeeService,
     private readonly supportClientService: SupportClientService,
-  ) {}
+  ) { }
 
   @Post('/client/support-requests/')
   @Roles(Role.Client)
   @UseGuards(RolesGuard)
   @UseGuards(AuthenticatedGuard)
   async createSupportRequest(
-    @Body() data: newSupportRequestDto,
+    @Body() data: NewSupportRequestDto,
     @Request() req,
   ) {
     const { text } = data;
@@ -54,7 +54,7 @@ export class SupportController {
   @UseGuards(AuthenticatedGuard)
   async getClientSupportRequests(
     @Request() req,
-    @Query() data: getSupportRequestsDto,
+    @Query() data: GetSupportRequestsDto,
   ) {
     const user = req.user._doc._id;
     const response = await this.supportClientService.getClientSupportRequests(
@@ -70,7 +70,7 @@ export class SupportController {
   @UseGuards(AuthenticatedGuard)
   async sendMessage(
     @Param('id') supportRequest,
-    @Body() data: newSupportRequestDto,
+    @Body() data: NewSupportRequestDto,
     @Request() req,
   ) {
     const author = req.user._doc._id;
@@ -86,7 +86,7 @@ export class SupportController {
   @Roles(Role.Client)
   @UseGuards(RolesGuard)
   @UseGuards(AuthenticatedGuard)
-  async getManagerSupportRequests(@Query() data: getSupportRequestsDto) {
+  async getManagerSupportRequests(@Query() data: GetSupportRequestsDto) {
     const response =
       await this.supportEmployeeService.getManagerSupportRequests(data);
     return response;

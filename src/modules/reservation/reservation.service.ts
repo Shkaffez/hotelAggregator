@@ -4,7 +4,7 @@ import { Connection, Model } from 'mongoose';
 import { ID } from '../id.type';
 import {
   IReservation,
-  ReservationDto,
+  Reservationdto,
   ReservationSearchOptions,
 } from './interfaces';
 import { Reservation, ReservationDocument } from './schemas/reservation.schema';
@@ -18,7 +18,7 @@ export class ReservationService implements IReservation {
     @InjectConnection() private connection: Connection,
   ) { }
 
-  async addReservation(data: ReservationDto): Promise<Reservation> {
+  async addReservation(data: Reservationdto): Promise<Reservation> {
     const { roomId, dateStart, dateEnd } = data;
     const isReserved = this.ReservationModel.find({
       roomId: roomId,

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ID } from '../id.type';
 import {
   ISupportRequestEmployeeService,
-  MarkMessagesAsReadDto,
+  MarkMessagesAsReaddto,
   SearchSupportRequestParams,
 } from './interfaces';
 import { Message, MessageDocument } from './schemas/Message.schema';
@@ -22,9 +22,9 @@ export class SupportEmployeeService implements ISupportRequestEmployeeService {
     @InjectModel(Message.name)
     private readonly MessageModel: Model<MessageDocument>,
     @InjectConnection() private connection: Connection,
-  ) {}
+  ) { }
 
-  async markMessagesAsRead(params: MarkMessagesAsReadDto) {
+  async markMessagesAsRead(params: MarkMessagesAsReaddto) {
     let { supportRequest } = params;
     supportRequest = new mongoose.Types.ObjectId(supportRequest);
     const supportRequestData = await this.SupportRequestModel.findById(
@@ -62,7 +62,7 @@ export class SupportEmployeeService implements ISupportRequestEmployeeService {
     );
     const supportRequestAuthor = supportRequestData.user;
     const messages = supportRequestData.messages;
-    // support request author is always client, we count all his uread messages
+    // support request author is always client, we count all his unread messages
     let count = 0;
     for (let i = 0; i < messages.length; i++) {
       if (

@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { LoginGuard } from 'src/guards/login.guard';
-import { CreateUserDto } from '../users/dto/createUser.Dto';
+import { CreateUserDto } from '../users/dto/createUser.dto';
 import { AuthService } from './auth.service';
 import * as bcript from 'bcrypt';
 import { MongoExceptionFilter } from 'src/utils/mongoExceptionFilter';

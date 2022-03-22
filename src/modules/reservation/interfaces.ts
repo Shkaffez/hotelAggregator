@@ -1,7 +1,7 @@
 import { ID } from '../id.type';
 import { Reservation } from './schemas/reservation.schema';
 
-export interface ReservationDto {
+export interface Reservationdto {
   userId: ID;
   hotelId: ID;
   roomId: ID;
@@ -15,7 +15,7 @@ export interface ReservationSearchOptions {
   dateEnd: Date;
 }
 export interface IReservation {
-  addReservation(data: ReservationDto): Promise<Reservation>;
+  addReservation(data: Reservationdto): Promise<Reservation>;
   removeReservation(id: ID): Promise<void>;
   getReservations(
     filter: ReservationSearchOptions,

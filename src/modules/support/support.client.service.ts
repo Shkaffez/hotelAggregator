@@ -3,9 +3,9 @@ import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
 import { ID } from '../id.type';
 import {
-  CreateSupportRequestDto,
+  CreateSupportRequestdto,
   ISupportRequestClientService,
-  MarkMessagesAsReadDto,
+  MarkMessagesAsReaddto,
   SearchSupportRequestParams,
 } from './interfaces';
 import { Message, MessageDocument } from './schemas/Message.schema';
@@ -23,10 +23,10 @@ export class SupportClientService implements ISupportRequestClientService {
     @InjectModel(Message.name)
     private readonly MessageModel: Model<MessageDocument>,
     @InjectConnection() private connection: Connection,
-  ) {}
+  ) { }
 
   async createSupportRequest(
-    data: CreateSupportRequestDto,
+    data: CreateSupportRequestdto,
   ): Promise<SupportRequest> {
     const _id = new mongoose.Types.ObjectId();
     const messageId = new mongoose.Types.ObjectId();
@@ -85,7 +85,7 @@ export class SupportClientService implements ISupportRequestClientService {
     return Promise.all(hasNewMessages);
   }
 
-  async markMessagesAsRead(params: MarkMessagesAsReadDto) {
+  async markMessagesAsRead(params: MarkMessagesAsReaddto) {
     let { supportRequest, user } = params;
     supportRequest = new mongoose.Types.ObjectId(supportRequest);
     const supportRequestData = await this.SupportRequestModel.findById(

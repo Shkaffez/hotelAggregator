@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
 import { ID } from '../id.type';
-import { ISupportRequestService, SendMessageDto } from './interfaces';
+import { ISupportRequestService, SendMessagedto } from './interfaces';
 import { Message, MessageDocument } from './schemas/Message.schema';
 import {
   SupportRequest,
@@ -18,9 +18,9 @@ export class SupportService implements ISupportRequestService {
     @InjectModel(Message.name)
     private readonly MessageModel: Model<MessageDocument>,
     @InjectConnection() private connection: Connection,
-  ) {}
+  ) { }
 
-  async sendMessage(data: SendMessageDto): Promise<Message> {
+  async sendMessage(data: SendMessagedto): Promise<Message> {
     const _id = new mongoose.Types.ObjectId();
     let { author, supportRequest, text } = data;
     const message = new this.MessageModel({ _id, author, text });

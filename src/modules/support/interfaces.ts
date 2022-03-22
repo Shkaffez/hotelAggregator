@@ -2,17 +2,17 @@ import { ID } from '../id.type';
 import { Message } from './schemas/Message.schema';
 import { SupportRequest } from './schemas/SupportRequest.schema';
 
-export interface CreateSupportRequestDto {
+export interface CreateSupportRequestdto {
   user: ID;
   text: string;
 }
 
-export interface SendMessageDto {
+export interface SendMessagedto {
   author: ID;
   supportRequest: ID;
   text: string;
 }
-export interface MarkMessagesAsReadDto {
+export interface MarkMessagesAsReaddto {
   user: ID;
   supportRequest: ID;
 }
@@ -29,7 +29,7 @@ export interface SearchSupportRequestParams {
 }
 
 export interface ISupportRequestService {
-  sendMessage(data: SendMessageDto): Promise<Message>;
+  sendMessage(data: SendMessagedto): Promise<Message>;
   getMessages(supportRequest: ID, user): Promise<Message[]>;
   subscribe(
     handler: (supportRequest: SupportRequest, message: Message) => void,
@@ -38,14 +38,14 @@ export interface ISupportRequestService {
 
 export interface ISupportRequestClientService {
   getClientSupportRequests(data: SearchSupportRequestParams, userId: ID);
-  createSupportRequest(data: CreateSupportRequestDto): Promise<SupportRequest>;
-  markMessagesAsRead(params: MarkMessagesAsReadDto);
+  createSupportRequest(data: CreateSupportRequestdto): Promise<SupportRequest>;
+  markMessagesAsRead(params: MarkMessagesAsReaddto);
   getUnreadCount(supportRequest: ID): Promise<number>;
 }
 
 export interface ISupportRequestEmployeeService {
   getManagerSupportRequests(data: SearchSupportRequestParams);
-  markMessagesAsRead(params: MarkMessagesAsReadDto);
+  markMessagesAsRead(params: MarkMessagesAsReaddto);
   getUnreadCount(supportRequest: ID): Promise<number>;
   closeRequest(supportRequest: ID): Promise<void>;
 }

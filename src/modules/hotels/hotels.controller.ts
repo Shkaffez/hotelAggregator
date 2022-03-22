@@ -19,11 +19,11 @@ import { editFileName } from 'src/utils/file-uploading.utils';
 import { imageFileFilter } from 'src/utils/imageFileFilter';
 import { Role } from 'src/utils/role.enum';
 import { Roles } from 'src/utils/roles.decorator';
-import { NewHotelDto } from './dto/newHotel.Dto';
-import { NewRoomDto } from './dto/newRoom.Dto';
-import { SearchHotelsDto } from './dto/searchHotels.Dto';
-import { SearchRoomsDto } from './dto/searchRooms.Dto';
-import { UpdateRoomDto } from './dto/updateRoom.Dto';
+import { NewHoteldto } from './dto/newHotel.dto';
+import { NewRoomdto } from './dto/newRoom.dto';
+import { SearchHotelsdto } from './dto/searchHotels.dto';
+import { SearchRoomsdto } from './dto/searchRooms.dto';
+import { UpdateRoomdto } from './dto/updateRoom.dto';
 import { HotelRoomsService } from './hotel.rooms.service';
 import { HotelsService } from './hotels.service';
 
@@ -35,7 +35,7 @@ export class HotelsController {
   ) { }
 
   @Get('/common/hotel-rooms')
-  searchRooms(@Query() data: SearchRoomsDto) {
+  searchRooms(@Query() data: SearchRoomsdto) {
     return this.hotelRoomService.search(data);
   }
 
@@ -48,7 +48,7 @@ export class HotelsController {
   @Roles(Role.Admin)
   @UseGuards(RolesGuard)
   @UseGuards(AuthenticatedGuard)
-  addNewHotel(@Body() data: NewHotelDto) {
+  addNewHotel(@Body() data: NewHoteldto) {
     return this.hotelService.create(data);
   }
 
@@ -56,7 +56,7 @@ export class HotelsController {
   @Roles(Role.Admin)
   @UseGuards(RolesGuard)
   @UseGuards(AuthenticatedGuard)
-  searchHotels(@Query() data: SearchHotelsDto) {
+  searchHotels(@Query() data: SearchHotelsdto) {
     return this.hotelService.search(data);
   }
 
@@ -64,7 +64,7 @@ export class HotelsController {
   @Roles(Role.Admin)
   @UseGuards(RolesGuard)
   @UseGuards(AuthenticatedGuard)
-  updateHotel(@Param('id') id, @Body() data: NewHotelDto) {
+  updateHotel(@Param('id') id, @Body() data: NewHoteldto) {
     return this.hotelService.update(id, data);
   }
 
@@ -79,7 +79,7 @@ export class HotelsController {
     }),
   )
   addNewRoom(
-    @Body() body: NewRoomDto,
+    @Body() body: NewRoomdto,
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
     const { title, hotelId, description } = body;
@@ -104,7 +104,7 @@ export class HotelsController {
     }),
   )
   updateRoom(
-    @Body() body: UpdateRoomDto,
+    @Body() body: UpdateRoomdto,
     @Param('id') id,
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {

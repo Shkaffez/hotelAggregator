@@ -7,10 +7,10 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/createUser.Dto';
+import { CreateUserDto } from './dto/createUser.dto';
 import { UsersService } from './users.service';
 import * as bcript from 'bcrypt';
-import { SearchUsersDto } from './dto/searchUsers.Dto';
+import { SearchUsersDto } from './dto/searchUsers.dto';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/utils/roles.decorator';
 import { Role } from 'src/utils/role.enum';
