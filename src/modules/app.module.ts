@@ -20,7 +20,7 @@ import { RedisModule } from '../redis/redis.module';
   imports: [
     ConfigModule.forRoot(),
     MongooseModule.forRoot(
-      'mongodb+srv://shishkov-i:12qwaszx@cluster0.x7d8w.mongodb.net/hoyelAggregator?retryWrites=true&w=majority',
+      'mongodb://mongodb:27017/DB'
     ),
     MulterModule.register({
       dest: './files',
